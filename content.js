@@ -1,25 +1,25 @@
 // content.js
 
-// Função para extrair os dados de um documento específico (pode ser o documento principal ou o do iframe)
+// Function to extract data from a specific document (can be the main document or the iframe's document)
 function extractData(contextDocument) {
     const data = {};
 
-    // Extrair Protocolo
+    // Extract Protocolo
     const protocoloElement = contextDocument.getElementById('ctl00_conteudo_lblProtocolo');
     let rawProtocolo = protocoloElement ? protocoloElement.textContent.trim() : 'Não encontrado';
     
-    // Converte o protocolo para um número inteiro para garantir a correspondência correta no upsert
-    // Se não for um número válido, mantém como "Não encontrado" ou o valor original.
+    // Convert protocol to an integer to ensure correct matching in upsert
+    // If not a valid number, keep as "Não encontrado" or the original value.
     data.protocolo = parseInt(rawProtocolo, 10);
     if (isNaN(data.protocolo)) {
-        data.protocolo = rawProtocolo; // Mantém o valor original se não for um número
+        data.protocolo = rawProtocolo; // Keep original value if not a number
     }
 
-    // Extrair Data e Hora
+    // Extract Date and Time
     const dataHoraElement = contextDocument.getElementById('ctl00_conteudo_lblEm');
     data.dataHora = dataHoraElement ? dataHoraElement.textContent.trim() : 'Não encontrado';
 
-    // Extrair Bloco (apenas a letra) e Unidade
+    // Extract Block (only the letter) and Unit
     const perfilOcorrenciaDiv = contextDocument.querySelector('.perfil_ocorrencia');
     if (perfilOcorrenciaDiv) {
         const blocoElement = perfilOcorrenciaDiv.querySelector('div.esq.t100.s11.truncate:nth-child(2)');
@@ -42,7 +42,7 @@ function extractData(contextDocument) {
         data.unidade = 'Unidade não encontrada (div perfil_ocorrencia não encontrada no iframe)';
     }
 
-    // Extrair Status do select - Get the text content of the selected option
+    // Extract Status from the select - Get the text content of the selected option
     const statusSelectElement = contextDocument.getElementById('ctl00_conteudo_ddlStatus');
     data.status = statusSelectElement && statusSelectElement.options[statusSelectElement.selectedIndex] ? 
                   statusSelectElement.options[statusSelectElement.selectedIndex].textContent : 'Não encontrado';
@@ -105,8 +105,8 @@ function fillCheckboxesFromApi(apiData) {
         document.getElementById('chkSubsindico').checked = apiData.sub === 1;
         document.getElementById('chkSindico').checked = apiData.sindico === 1;
         document.getElementById('chkAdministracao').checked = apiData.adm === 1;
-        // O campo 'solucao' da API corresponde ao checkbox 'Resolvido'
-        document.getElementById('chkResolvido').checked = apiData.solucao === 1;
+        // O campo 'resolvido' da API corresponde ao checkbox 'Resolvido'
+        document.getElementById('chkResolvido').checked = apiData.resolvido === 1;
     }
 }
 
@@ -115,8 +115,15 @@ async function injectForm(sourceDocument) {
     const extractedData = extractData(sourceDocument);
     let formContainer = document.getElementById('condominio-extension-form');
 
-    if (!formContainer) {
-        // If the form does not exist, create it
+    // Se o protocolo for "Não encontrado", remove o formulário se ele existir
+    // e retorna para não recriá-lo sem dados válidos.
+    if (typeof extractedData.protocolo !== 'number' && formContainer) {
+        formContainer.remove();
+        return;
+    }
+    
+    // Se o formulário não existe e o protocolo é válido, cria um novo
+    if (!formContainer && typeof extractedData.protocolo === 'number') {
         formContainer = document.createElement('div');
         formContainer.id = 'condominio-extension-form';
         formContainer.style.cssText = `
@@ -331,6 +338,12 @@ async function injectForm(sourceDocument) {
 
                 if (success) {
                     console.log('Dados enviados com sucesso para o PHP!', result);
+                    // Adiciona a chamada para re-injetar o formulário após o sucesso para
+                    // atualizar o estado (cor de fundo, etc.)
+                    const iframe = document.getElementById('IFRAME_DETALHE');
+                    if (iframe && iframe.contentDocument) {
+                        injectForm(iframe.contentDocument);
+                    }
                 } else {
                     console.error('Erro ao enviar dados para o PHP:', result.message, response.status);
                 }
@@ -350,9 +363,6 @@ async function injectForm(sourceDocument) {
             formContainer.remove();
         });
     }
-
-    // A partir daqui, a lógica de checagem da API será executada
-    updateDisplayedData(extractedData);
     
     // Check for existing data and update form
     const existingData = await checkExistingData(extractedData.protocolo);
@@ -364,59 +374,45 @@ async function injectForm(sourceDocument) {
     } else {
         // Se a ocorrência não existe, mantém o fundo padrão e reseta os checkboxes
         formContainer.style.backgroundColor = '#f0f4f8';
-        document.getElementById('chkSubsindico').checked = false;
-        document.getElementById('chkSindico').checked = false;
-        document.getElementById('chkAdministracao').checked = false;
-        document.getElementById('chkResolvido').checked = false;
+        if (formContainer) {
+          document.getElementById('chkSubsindico').checked = false;
+          document.getElementById('chkSindico').checked = false;
+          document.getElementById('chkAdministracao').checked = false;
+          document.getElementById('chkResolvido').checked = false;
+        }
     }
+    
+    // A partir daqui, a lógica de checagem da API será executada
+    updateDisplayedData(extractedData);
 }
 
-// Observe the iframe to detect when content is loaded
+
+// Observa o iframe para detectar quando o conteúdo é carregado
 const iframe = document.getElementById('IFRAME_DETALHE');
 
-if (iframe) {
-    iframe.addEventListener('load', () => {
-        console.log('Iframe carregado. Tentando injetar/atualizar formulário.');
-        // When the iframe loads, try to inject/update the form
-        // passing the iframe's document as context
-        try {
-            injectForm(iframe.contentDocument);
-        } catch (e) {
-            console.error("Erro ao acessar contentDocument do iframe (possível problema de CORS ou iframe ainda não pronto):", e);
-            // If there's a CORS error (cross-origin), we won't be able to access the contentDocument.
-            // In this case, the manual "Atualizar Dados da Tela" button would be the only option.
-            const formContainer = document.getElementById('condominio-extension-form');
-            if (formContainer) {
-                const feedbackIconsContainer = document.getElementById('feedbackIcons');
-                if (feedbackIconsContainer) {
-                    feedbackIconsContainer.innerHTML = ''; // Clear previous icons
-                    const errorIcon = document.createElement('span');
-                    errorIcon.className = 'feedback-icon material-icons error';
-                    errorIcon.textContent = 'warning';
-                    errorIcon.title = 'Atenção: Dados do iframe podem não ser atualizados automaticamente devido a restrições de segurança ou conteúdo.';
-                    feedbackIconsContainer.appendChild(errorIcon);
-                }
-            }
-        }
+// Lógica de injeção baseada na URL
+if (window.location.pathname.includes('mensagem_detalhe.aspx') && !iframe) {
+    // Caso de URL de mensagem aberta diretamente
+    window.addEventListener('load', () => injectForm(document));
+} else if (window.location.pathname.includes('mensagensV1.aspx')) {
+    // Caso de listagem de mensagens
+    window.addEventListener('load', () => {
+        injectForm(document); // Injeta o formulário na carga inicial da página
     });
 
-    // For cases where the iframe is already loaded on extension initialization
-    // or if the 'load' event has already fired before the listener was added.
-    // A small delay can be useful to ensure the iframe's DOM is fully ready.
-    setTimeout(() => {
-        if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
-            console.log('Iframe já estava carregado. Injetando/atualizando formulário.');
+    if (iframe) {
+        iframe.addEventListener('load', () => {
+            console.log('Iframe carregado. Tentando injetar/atualizar formulário.');
             try {
+                // Remove o formulário antigo para garantir que os checkboxes sejam resetados corretamente
+                const oldForm = document.getElementById('condominio-extension-form');
+                if (oldForm) {
+                    oldForm.remove();
+                }
                 injectForm(iframe.contentDocument);
             } catch (e) {
-                console.error("Erro ao acessar contentDocument do iframe na inicialização:", e);
+                console.error("Erro ao acessar contentDocument do iframe (possível problema de CORS ou iframe ainda não pronto):", e);
             }
-        }
-    }, 500); // Small delay to ensure the iframe is ready
-} else {
-    console.warn("Elemento 'IFRAME_DETALHE' não encontrado. A extensão pode não funcionar como esperado.");
-    // If the iframe is not found, the extension will still inject the form,
-    // but the extracted data will come from the main document (which will likely be "Não encontrado").
-    // The "Atualizar Dados da Tela" button would still work, but it wouldn't solve the iframe issue.
-    window.addEventListener('load', () => injectForm(document));
+        });
+    }
 }
