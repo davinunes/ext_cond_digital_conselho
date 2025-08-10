@@ -43,8 +43,15 @@ function extractData(contextDocument) {
     data.status = statusSelectElement && statusSelectElement.options[statusSelectElement.selectedIndex] ? 
                   statusSelectElement.options[statusSelectElement.selectedIndex].textContent : 'Não encontrado';
 
-    // URL
-    data.iframeUrl = window.location.href;
+    // Extração condicional da URL
+    const iframe = document.getElementById('IFRAME_DETALHE');
+    if (iframe && iframe.contentDocument) {
+        // Se a extração veio do iframe, usa a URL do iframe
+        data.iframeUrl = iframe.src;
+    } else {
+        // Caso contrário (página de detalhes direta), usa a URL da janela principal
+        data.iframeUrl = window.location.href;
+    }
 
     // Extração de total de mensagens e data da última mensagem
     if (comentGridDiv) {
@@ -377,28 +384,35 @@ async function injectForm(sourceDocument) {
 // Lógica principal de injeção da extensão
 window.addEventListener('load', () => {
     const pathname = window.location.pathname;
-
+    
     if (pathname.includes('mensagem_detalhe.aspx')) {
-        injectForm(document);
+        // Se a página for de detalhes, injeta o formulário usando o documento principal
+        const extractedData = extractData(document);
+        if (typeof extractedData.protocolo === 'number') {
+            injectForm(document);
+        }
     } else if (pathname.includes('mensagensV1.aspx')) {
+        // Se a página for de listagem, espera o iframe carregar
         const iframe = document.getElementById('IFRAME_DETALHE');
         if (iframe) {
             iframe.addEventListener('load', () => {
                 try {
-                    injectForm(iframe.contentDocument);
+                    const extractedData = extractData(iframe.contentDocument);
+                    if (typeof extractedData.protocolo === 'number') {
+                        injectForm(iframe.contentDocument);
+                    }
                 } catch (e) {
                     console.error("Erro ao acessar contentDocument do iframe:", e);
                 }
             });
             setTimeout(() => {
                 if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
-                    injectForm(iframe.contentDocument);
+                    const extractedData = extractData(iframe.contentDocument);
+                    if (typeof extractedData.protocolo === 'number') {
+                        injectForm(iframe.contentDocument);
+                    }
                 }
             }, 500);
-        } else {
-             // Injeta o formulário na página de listagem, mas sem dados
-             // ele será preenchido quando o iframe carregar
-             injectForm(document);
         }
     }
 });
