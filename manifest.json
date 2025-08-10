@@ -1,0 +1,20 @@
+{
+  "manifest_version": 3,
+  "name": "Extensão Condomínio",
+  "version": "1.0",
+  "description": "Extrai dados da página do condomínio e envia para uma API externa.",
+  "permissions": [
+    "activeTab",
+    "scripting"
+  ],
+  "host_permissions": [
+    "https://mini.davinunes.eti.br/*",
+    "https://app.condominiodigital.com.br/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": ["https://app.condominiodigital.com.br/*"],
+      "js": ["content.js"]
+    }
+  ]
+}
