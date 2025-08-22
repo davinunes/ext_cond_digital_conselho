@@ -43,15 +43,9 @@ function extractData(contextDocument) {
     data.status = statusSelectElement && statusSelectElement.options[statusSelectElement.selectedIndex] ? 
                   statusSelectElement.options[statusSelectElement.selectedIndex].textContent : 'Não encontrado';
 
-    // Extração condicional da URL
+    // URL
     const iframe = document.getElementById('IFRAME_DETALHE');
-    if (iframe && iframe.contentDocument) {
-        // Se a extração veio do iframe, usa a URL do iframe
-        data.iframeUrl = iframe.src;
-    } else {
-        // Caso contrário (página de detalhes direta), usa a URL da janela principal
-        data.iframeUrl = window.location.href;
-    }
+    data.iframeUrl = iframe && iframe.src ? iframe.src : window.location.href;
 
     // Extração de total de mensagens e data da última mensagem
     if (comentGridDiv) {
@@ -99,7 +93,6 @@ async function checkExistingData(protocolo) {
     }
 }
 
-
 // Função para atualizar os dados exibidos no formulário
 function updateDisplayedData(extractedData) {
     const displayProtocolo = document.getElementById('displayProtocolo');
@@ -117,13 +110,22 @@ function updateDisplayedData(extractedData) {
     if (displayIframeUrl) displayIframeUrl.textContent = `URL do Iframe: ${extractedData.iframeUrl}`;
 }
 
-// Função para preencher os checkboxes com base nos dados da API
-function fillCheckboxesFromApi(apiData) {
+// Função para preencher os checkboxes e botões com base nos dados da API
+function fillFormFromApi(apiData) {
     if (apiData) {
         document.getElementById('chkSubsindico').checked = apiData.sub === 1;
         document.getElementById('chkSindico').checked = apiData.sindico === 1;
-        document.getElementById('chkAdministracao').checked = apiData.adm === 1;
+        document.getElementById('chkAdm').checked = apiData.adm === 1;
         document.getElementById('chkResolvido').checked = apiData.resolvido === 1;
+
+        const buttons = document.querySelectorAll('#responsabilidade-buttons button');
+        buttons.forEach(btn => btn.classList.remove('active'));
+
+        if (apiData.responsabilidade === 'sindico') {
+            document.getElementById('btnSindico').classList.add('active');
+        } else if (apiData.responsabilidade === 'sub') {
+            document.getElementById('btnSub').classList.add('active');
+        }
     }
 }
 
@@ -146,18 +148,18 @@ async function injectForm(sourceDocument) {
             position: fixed;
             bottom: 20px;
             right: 20px;
-            background-color: #f0f4f8; /* Light blue-gray */
-            border: 1px solid #d1d9e6; /* Slightly darker border */
-            border-radius: 12px; /* More rounded corners */
+            background-color: #f0f4f8;
+            border: 1px solid #d1d9e6;
+            border-radius: 12px;
             padding: 20px;
-            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); /* Stronger shadow */
+            box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2);
             z-index: 10000;
-            font-family: 'Inter', sans-serif; /* Modern font */
-            color: #334155; /* Darker text for contrast */
+            font-family: 'Inter', sans-serif;
+            color: #334155;
             max-width: 300px;
             display: flex;
             flex-direction: column;
-            gap: 15px; /* Spacing between elements */
+            gap: 15px;
         `;
 
         formContainer.innerHTML = `
@@ -262,6 +264,29 @@ async function injectForm(sourceDocument) {
                     max-width: 100%;
                     display: block;
                 }
+                .responsibility-button-group {
+                    display: flex;
+                }
+                .responsibility-button-group button {
+                    background-color: #e2e8f0;
+                    color: #475569;
+                    border: 1px solid #94a3b8;
+                    flex-grow: 1;
+                    transition: background-color 0.3s ease, color 0.3s ease;
+                }
+                .responsibility-button-group button:first-child {
+                    border-right: none;
+                    border-top-left-radius: 8px;
+                    border-bottom-left-radius: 8px;
+                }
+                .responsibility-button-group button:last-child {
+                    border-top-right-radius: 8px;
+                    border-bottom-right-radius: 8px;
+                }
+                .responsibility-button-group .active {
+                    background-color: #4f46e5;
+                    color: white;
+                }
             </style>
             <h3>Registrar Ocorrência</h3>
             <div class="extracted-data">
@@ -273,24 +298,55 @@ async function injectForm(sourceDocument) {
                 <span id="displayIframeUrl"></span>
             </div>
             <label>
-                <input type="checkbox" id="chkSubsindico"> Subsíndico
+                <input type="checkbox" id="chkSubsindico"> Interação Subsíndico
             </label>
             <label>
-                <input type="checkbox" id="chkSindico"> Síndico
+                <input type="checkbox" id="chkSindico"> Interação Síndico
             </label>
             <label>
-                <input type="checkbox" id="chkAdministracao"> Administração
+                <input type="checkbox" id="chkAdm"> Interação Adm.
             </label>
             <label>
                 <input type="checkbox" id="chkResolvido"> Resolvido
             </label>
-            <button id="sendDataBtn">Sincronizar</button>
+            <div class="flex items-center justify-between mt-3">
+                <label class="text-sm">Responsabilidade:</label>
+                <div id="responsabilidade-buttons" class="flex rounded-lg overflow-hidden text-sm">
+                    <button id="btnSub" class="px-3 py-1 flex-1 transition-colors duration-200">Subsíndico</button>
+                    <button id="btnSindico" class="px-3 py-1 flex-1 transition-colors duration-200">Síndico</button>
+                </div>
+            </div>
+            <button id="sendDataBtn" class="mt-4">Sincronizar</button>
             <div id="feedbackIcons" class="feedback-icons"></div>
             <button class="close-button">&times;</button>
         `;
 
         document.body.appendChild(formContainer);
 
+        // Adiciona listeners para os novos botões de responsabilidade
+        const subButton = document.getElementById('btnSub');
+        const sindicoButton = document.getElementById('btnSindico');
+        
+        // Lógica de toggle para os botões de responsabilidade
+        subButton.addEventListener('click', () => {
+            const isActive = subButton.classList.contains('active');
+            // Remove a classe 'active' de todos
+            document.querySelectorAll('#responsabilidade-buttons button').forEach(btn => btn.classList.remove('active'));
+            // Adiciona a classe 'active' apenas se não estava ativa
+            if (!isActive) {
+                subButton.classList.add('active');
+            }
+        });
+
+        sindicoButton.addEventListener('click', () => {
+            const isActive = sindicoButton.classList.contains('active');
+            document.querySelectorAll('#responsabilidade-buttons button').forEach(btn => btn.classList.remove('active'));
+            if (!isActive) {
+                sindicoButton.classList.add('active');
+            }
+        });
+
+        // Add listener for the send button
         document.getElementById('sendDataBtn').addEventListener('click', async () => {
             let currentExtractedData;
             const iframe = document.getElementById('IFRAME_DETALHE');
@@ -309,9 +365,17 @@ async function injectForm(sourceDocument) {
             formData.append('status', currentExtractedData.status);
             formData.append('total_mensagens', currentExtractedData.total_mensagens);
             formData.append('data_ultima_mensagem', currentExtractedData.data_ultima_mensagem);
+            
+            // Adicionado a captura dos checkboxes de interação subsindico e sindico
             formData.append('subsindico', document.getElementById('chkSubsindico').checked ? 'Sim' : 'Não');
             formData.append('sindico', document.getElementById('chkSindico').checked ? 'Sim' : 'Não');
-            formData.append('administracao', document.getElementById('chkAdministracao').checked ? 'Sim' : 'Não');
+            
+            // Envia o novo campo 'responsabilidade' com base no botão ativo
+            const activeResponsibilityButton = document.querySelector('#responsabilidade-buttons button.active');
+            formData.append('responsabilidade', activeResponsibilityButton ? activeResponsibilityButton.id.substring(3).toLowerCase() : '');
+
+            // Campos de adm e resolvido continuam como antes
+            formData.append('adm', document.getElementById('chkAdm').checked ? 'Sim' : 'Não');
             formData.append('resolvido', document.getElementById('chkResolvido').checked ? 'Sim' : 'Não');
 
             const feedbackIconsContainer = document.getElementById('feedbackIcons');
@@ -368,14 +432,15 @@ async function injectForm(sourceDocument) {
     
     if (existingData) {
         formContainer.style.backgroundColor = '#bbf7d0';
-        fillCheckboxesFromApi(existingData);
+        fillFormFromApi(existingData);
     } else {
         formContainer.style.backgroundColor = '#f0f4f8';
         if (formContainer) {
-          document.getElementById('chkSubsindico').checked = false;
-          document.getElementById('chkSindico').checked = false;
-          document.getElementById('chkAdministracao').checked = false;
-          document.getElementById('chkResolvido').checked = false;
+            document.getElementById('chkAdm').checked = false;
+            document.getElementById('chkResolvido').checked = false;
+            document.getElementById('chkSubsindico').checked = false;
+            document.getElementById('chkSindico').checked = false;
+            document.querySelectorAll('#responsabilidade-buttons button').forEach(btn => btn.classList.remove('active'));
         }
     }
 }
@@ -386,13 +451,11 @@ window.addEventListener('load', () => {
     const pathname = window.location.pathname;
     
     if (pathname.includes('mensagem_detalhe.aspx')) {
-        // Se a página for de detalhes, injeta o formulário usando o documento principal
         const extractedData = extractData(document);
         if (typeof extractedData.protocolo === 'number') {
             injectForm(document);
         }
     } else if (pathname.includes('mensagensV1.aspx')) {
-        // Se a página for de listagem, espera o iframe carregar
         const iframe = document.getElementById('IFRAME_DETALHE');
         if (iframe) {
             iframe.addEventListener('load', () => {
