@@ -110,21 +110,25 @@ function updateDisplayedData(extractedData) {
     if (displayIframeUrl) displayIframeUrl.textContent = `URL do Iframe: ${extractedData.iframeUrl}`;
 }
 
-// Função para preencher os checkboxes e botões com base nos dados da API
+// Função para preencher os checkboxes e o select com base nos dados da API
 function fillFormFromApi(apiData) {
     if (apiData) {
-        document.getElementById('chkSubsindico').checked = apiData.sub === 1;
-        document.getElementById('chkSindico').checked = apiData.sindico === 1;
-        document.getElementById('chkAdm').checked = apiData.adm === 1;
-        document.getElementById('chkResolvido').checked = apiData.resolvido === 1;
+        const chkSubsindico = document.getElementById('chkSubsindico');
+        if (chkSubsindico) chkSubsindico.checked = apiData.sub === 1;
 
-        const buttons = document.querySelectorAll('#responsabilidade-buttons button');
-        buttons.forEach(btn => btn.classList.remove('active'));
+        const chkSindico = document.getElementById('chkSindico');
+        if (chkSindico) chkSindico.checked = apiData.sindico === 1;
 
-        if (apiData.responsabilidade === 'sindico') {
-            document.getElementById('btnSindico').classList.add('active');
-        } else if (apiData.responsabilidade === 'sub') {
-            document.getElementById('btnSub').classList.add('active');
+        const chkAdm = document.getElementById('chkAdm');
+        if (chkAdm) chkAdm.checked = apiData.adm === 1;
+
+        const chkResolvido = document.getElementById('chkResolvido');
+        if (chkResolvido) chkResolvido.checked = apiData.resolvido === 1;
+
+        const responsabilidadeSelect = document.getElementById('responsabilidadeSelect');
+        if (responsabilidadeSelect) {
+            // Define o valor do select com base no valor da API
+            responsabilidadeSelect.value = apiData.responsabilidade || 'null';
         }
     }
 }
@@ -199,24 +203,24 @@ async function injectForm(sourceDocument) {
                     border-radius: 4px;
                 }
                 #condominio-extension-form button {
-                    background-color: #4f46e5;
-                    color: white;
+                    background-color: #e2e8f0;
+                    color: #475569;
                     padding: 12px 20px;
                     border: none;
                     border-radius: 8px;
                     cursor: pointer;
                     font-size: 1em;
                     font-weight: 600;
-                    transition: background-color 0.3s ease, transform 0.1s ease;
-                    box-shadow: 0 4px 8px rgba(79, 70, 229, 0.3);
+                    transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease;
+                    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
                 }
                 #condominio-extension-form button:hover {
-                    background-color: #6366f1;
+                    background-color: #d1d9e6;
                     transform: translateY(-2px);
                 }
                 #condominio-extension-form button:active {
                     transform: translateY(0);
-                    box-shadow: 0 2px 4px rgba(79, 70, 229, 0.3);
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
                 }
                 #condominio-extension-form .feedback-icons {
                     display: flex;
@@ -264,28 +268,17 @@ async function injectForm(sourceDocument) {
                     max-width: 100%;
                     display: block;
                 }
-                .responsibility-button-group {
+                .form-group {
                     display: flex;
+                    flex-direction: column;
+                    gap: 8px;
                 }
-                .responsibility-button-group button {
-                    background-color: #e2e8f0;
-                    color: #475569;
-                    border: 1px solid #94a3b8;
-                    flex-grow: 1;
-                    transition: background-color 0.3s ease, color 0.3s ease;
-                }
-                .responsibility-button-group button:first-child {
-                    border-right: none;
-                    border-top-left-radius: 8px;
-                    border-bottom-left-radius: 8px;
-                }
-                .responsibility-button-group button:last-child {
-                    border-top-right-radius: 8px;
-                    border-bottom-right-radius: 8px;
-                }
-                .responsibility-button-group .active {
-                    background-color: #4f46e5;
-                    color: white;
+                select {
+                    width: 100%;
+                    padding: 5px;
+                    border-radius: 8px;
+                    border: 1px solid #cbd5e1;
+                    background-color: white;
                 }
             </style>
             <h3>Registrar Ocorrência</h3>
@@ -309,12 +302,13 @@ async function injectForm(sourceDocument) {
             <label>
                 <input type="checkbox" id="chkResolvido"> Resolvido
             </label>
-            <div class="flex items-center justify-between mt-3">
-                <label class="text-sm">Responsabilidade:</label>
-                <div id="responsabilidade-buttons" class="flex rounded-lg overflow-hidden text-sm">
-                    <button id="btnSub" class="px-3 py-1 flex-1 transition-colors duration-200">Subsíndico</button>
-                    <button id="btnSindico" class="px-3 py-1 flex-1 transition-colors duration-200">Síndico</button>
-                </div>
+            <div class="form-group mt-3">
+                <label class="text-sm" for="responsabilidadeSelect">Responsabilidade:</label>
+                <select id="responsabilidadeSelect">
+                    <option value="null">Não Atribuído</option>
+                    <option value="sub">Subsíndico</option>
+                    <option value="sindico">Síndico</option>
+                </select>
             </div>
             <button id="sendDataBtn" class="mt-4">Sincronizar</button>
             <div id="feedbackIcons" class="feedback-icons"></div>
@@ -323,30 +317,6 @@ async function injectForm(sourceDocument) {
 
         document.body.appendChild(formContainer);
 
-        // Adiciona listeners para os novos botões de responsabilidade
-        const subButton = document.getElementById('btnSub');
-        const sindicoButton = document.getElementById('btnSindico');
-        
-        // Lógica de toggle para os botões de responsabilidade
-        subButton.addEventListener('click', () => {
-            const isActive = subButton.classList.contains('active');
-            // Remove a classe 'active' de todos
-            document.querySelectorAll('#responsabilidade-buttons button').forEach(btn => btn.classList.remove('active'));
-            // Adiciona a classe 'active' apenas se não estava ativa
-            if (!isActive) {
-                subButton.classList.add('active');
-            }
-        });
-
-        sindicoButton.addEventListener('click', () => {
-            const isActive = sindicoButton.classList.contains('active');
-            document.querySelectorAll('#responsabilidade-buttons button').forEach(btn => btn.classList.remove('active'));
-            if (!isActive) {
-                sindicoButton.classList.add('active');
-            }
-        });
-
-        // Add listener for the send button
         document.getElementById('sendDataBtn').addEventListener('click', async () => {
             let currentExtractedData;
             const iframe = document.getElementById('IFRAME_DETALHE');
@@ -366,15 +336,13 @@ async function injectForm(sourceDocument) {
             formData.append('total_mensagens', currentExtractedData.total_mensagens);
             formData.append('data_ultima_mensagem', currentExtractedData.data_ultima_mensagem);
             
-            // Adicionado a captura dos checkboxes de interação subsindico e sindico
             formData.append('subsindico', document.getElementById('chkSubsindico').checked ? 'Sim' : 'Não');
             formData.append('sindico', document.getElementById('chkSindico').checked ? 'Sim' : 'Não');
             
-            // Envia o novo campo 'responsabilidade' com base no botão ativo
-            const activeResponsibilityButton = document.querySelector('#responsabilidade-buttons button.active');
-            formData.append('responsabilidade', activeResponsibilityButton ? activeResponsibilityButton.id.substring(3).toLowerCase() : '');
+            const responsabilidadeSelect = document.getElementById('responsabilidadeSelect');
+            const responsabilidadeValue = responsabilidadeSelect.value === 'null' ? '' : responsabilidadeSelect.value;
+            formData.append('responsabilidade', responsabilidadeValue);
 
-            // Campos de adm e resolvido continuam como antes
             formData.append('adm', document.getElementById('chkAdm').checked ? 'Sim' : 'Não');
             formData.append('resolvido', document.getElementById('chkResolvido').checked ? 'Sim' : 'Não');
 
@@ -440,7 +408,7 @@ async function injectForm(sourceDocument) {
             document.getElementById('chkResolvido').checked = false;
             document.getElementById('chkSubsindico').checked = false;
             document.getElementById('chkSindico').checked = false;
-            document.querySelectorAll('#responsabilidade-buttons button').forEach(btn => btn.classList.remove('active'));
+            document.getElementById('responsabilidadeSelect').value = 'null';
         }
     }
 }
