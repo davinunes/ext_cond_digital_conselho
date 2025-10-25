@@ -1,5 +1,35 @@
 // content.js
 
+// Função para aplicar correções de estilo e altura na página de detalhes (aberta diretamente fora do iframe)
+function applyDetailPageStyles() {
+    // Remove todas as limitações de altura
+    const elementsToFix = [
+        '.content_iframe',
+        '.lv_detalhe',
+        '#ctl00_conteudo_uppEdit'
+    ];
+    
+    elementsToFix.forEach(selector => {
+        const el = document.querySelector(selector);
+        if (el) {
+            el.style.height = 'auto';
+            el.style.maxHeight = 'none';
+            el.style.overflow = 'visible';
+        }
+    });
+    
+    // Ajusta paddings excessivos nas linhas de comentário
+    document.querySelectorAll('.linha[style*="padding: 0 0 12% 0"]').forEach(el => {
+        el.style.paddingBottom = '30px';
+    });
+    
+    // Ajusta o body e html para usar 100% da altura
+    document.body.style.minHeight = '100vh';
+    document.documentElement.style.height = 'auto';
+    
+    console.log('Limitações de altura removidas! A tela de detalhes agora usa todo o espaço disponível.');
+}
+
 // Function to extract data from a specific document (can be the main document or the iframe's document)
 function extractData(contextDocument) {
     const data = {};
@@ -419,6 +449,9 @@ window.addEventListener('load', () => {
     const pathname = window.location.pathname;
     
     if (pathname.includes('mensagem_detalhe.aspx')) {
+        // Aplica as correções de estilo na página de detalhes
+        applyDetailPageStyles(); 
+
         const extractedData = extractData(document);
         if (typeof extractedData.protocolo === 'number') {
             injectForm(document);
