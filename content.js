@@ -45,7 +45,7 @@ function extractData(contextDocument) {
     let rawProtocolo = protocoloElement ? protocoloElement.textContent.trim() : 'Não encontrado';
     data.protocolo = parseInt(rawProtocolo, 10);
     if (isNaN(data.protocolo)) {
-        data.protocolo = rawProtocolo;
+        data.protocolo = rawProtocolo; 
     }
 
     // Processamento da Data e Hora
