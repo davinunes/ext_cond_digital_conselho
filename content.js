@@ -61,12 +61,12 @@ function extractData(contextDocument) {
             const unidadeMatch = blocoText.match(/-\s*(\d+)/);
             data.unidade = unidadeMatch && unidadeMatch[1] ? unidadeMatch[1].trim() : 'Não encontrado';
         } else {
-            data.bloco = 'Não encontrado';
-            data.unidade = 'Não encontrado';
+            data.bloco = 'Z';
+            data.unidade = '999';
         }
     } else {
-        data.bloco = 'Bloco não encontrado';
-        data.unidade = 'Unidade não encontrada';
+        data.bloco = 'Z';
+        data.unidade = '999';
     }
 
     // Processamento do Status
