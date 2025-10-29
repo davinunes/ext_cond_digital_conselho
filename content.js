@@ -57,9 +57,9 @@ function extractData(contextDocument) {
         if (blocoElement) {
             const blocoText = blocoElement.textContent.trim();
             const blocoMatch = blocoText.match(/Bloco\s+([A-Za-z])/);
-            data.bloco = blocoMatch && blocoMatch[1] ? blocoMatch[1].toUpperCase() : 'Não encontrado';
+            data.bloco = blocoMatch && blocoMatch[1] ? blocoMatch[1].toUpperCase() : 'Z';
             const unidadeMatch = blocoText.match(/-\s*(\d+)/);
-            data.unidade = unidadeMatch && unidadeMatch[1] ? unidadeMatch[1].trim() : 'Não encontrado';
+            data.unidade = unidadeMatch && unidadeMatch[1] ? unidadeMatch[1].trim() : '999';
         } else {
             data.bloco = 'Z';
             data.unidade = '999';
