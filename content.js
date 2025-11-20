@@ -360,7 +360,7 @@ async function injectForm(sourceDocument) {
                 #condominio-extension-form .close-button:hover { color: #64748b; }
                 #displayIframeUrl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: block; }
                 .form-group { display: flex; flex-direction: column; gap: 8px; }
-                select { width: 100%; padding: 8px; border-radius: 8px; border: 1px solid #cbd5e1; background-color: white; transition: all 0.3s ease; }
+                select { width: 100%; padding: 5px; border-radius: 8px; border: 1px solid #cbd5e1; background-color: white; transition: all 0.3s ease; }
             </style>
             <h3>Registrar Ocorrência</h3>
             <div class="extracted-data">
