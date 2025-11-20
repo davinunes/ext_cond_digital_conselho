@@ -52,7 +52,6 @@ function initGridMonitoring() {
                         
                     } else {
                         // Se o doc não estiver pronto, tenta de novo em breve
-                        // console.log('[GRID] ⏳ Iframe ainda carregando...');
                         setTimeout(setupObserver, 1000);
                     }
                 } catch (e) {
@@ -79,28 +78,69 @@ function initGridMonitoring() {
     findAndAttachToIframe();
 }
 
+// Função para consultar múltiplos IDs de uma vez (Lote/Batch)
+async function checkBatchExistingData(ids) {
+    if (!ids || ids.length === 0) return null;
+
+    console.log('[GRID API] 📤 Consultando lote de IDs:', ids); // DEBUG: IDs enviados
+
+    const checkUrl = `https://mini.davinunes.eti.br/ocorrenciasCondominioDigital/check.php`;
+    const formData = new URLSearchParams();
+    formData.append('ids', ids.join(',')); // Envia IDs separados por vírgula: "123,456,789"
+
+    try {
+        // Usamos POST para evitar limites de URL em query string muito longas
+        const response = await fetch(checkUrl, {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+            body: formData.toString(),
+            cache: 'no-cache'
+        });
+
+        if (!response.ok) {
+            console.error(`[GRID API] ❌ Erro na requisição em lote: ${response.status}`);
+            return null;
+        }
+
+        const result = await response.json();
+        console.log('[GRID API] 📩 Resposta do lote:', result); // DEBUG: Resposta da API
+        
+        if (result.status === 'success' && result.data) {
+            // Transforma o array de resultados em um objeto indexado pelo ID para acesso rápido
+            // Ex: { 123: {id: 123, resolvido: 1...}, 456: {id: 456, resolvido: 0...} }
+            const dataMap = {};
+            result.data.forEach(item => {
+                dataMap[item.id] = item;
+            });
+            return dataMap;
+        }
+        return null;
+    } catch (error) {
+        console.error('[GRID API] ❌ Erro de rede:', error);
+        return null;
+    }
+}
+
 // Processa os itens dentro do documento do iframe
 async function processIframeGrid(doc) {
     // Busca links que tenham ID e contenham o padrão de controle da lista
-    // Esse seletor busca dentro do documento do IFRAME (doc), não do topo
     const items = doc.querySelectorAll('a[id*="lvLista_ctrl"][id$="_lnkEdit"]');
     
-    if (items.length === 0) {
-        // console.log('[GRID] ⚠️ Nenhum item encontrado na lista neste momento.');
-        return;
-    }
+    if (items.length === 0) return;
 
-    // console.log(`[GRID] Encontrados ${items.length} itens na lista.`);
+    // Arrays para armazenar o que precisamos processar
+    const itemsToFetch = [];
+    const idsToFetch = [];
 
-    items.forEach(async (link) => {
+    // 1ª Passada: Coletar IDs que precisam ser verificados
+    items.forEach((link) => {
         const linkId = link.getAttribute('id');
         
-        // Se já processamos e pintamos este item nesta sessão de carga, pula
-        // (Isso economiza chamadas se o observer disparar múltiplas vezes)
+        // Se já processamos este elemento específico (pelo ID do DOM), pula
+        // Nota: Usamos dataset no elemento para controlar o estado visual
         if (link.dataset.processed === 'true') return;
 
         // Extração do número do protocolo
-        // Procura a div com a classe .esq.t80 que contém o texto "123456 | Livro..."
         const infoDiv = link.querySelector('.esq.t80');
         if (!infoDiv) return;
 
@@ -110,33 +150,49 @@ async function processIframeGrid(doc) {
         if (match && match[1]) {
             const protocolo = parseInt(match[1], 10);
             
-            // Marca o elemento DOM como processado
+            // Marca como processado para não pegar na próxima varredura do observer
             link.dataset.processed = 'true';
-
-            // Consulta a API
-            const apiData = await checkExistingData(protocolo);
             
-            // A div que deve mudar de cor é filha do link
-            const divButton = link.querySelector('.color_button');
-            
-            if (divButton && apiData) {
-                // Aplica transição suave
-                divButton.style.transition = 'background-color 0.5s ease, border-left 0.3s ease';
-                
-                if (apiData.resolvido === 1) {
-                    // VERDE CLARO (Resolvido)
-                    divButton.style.backgroundColor = '#d1fae5'; // bg-emerald-100
-                    divButton.style.borderLeft = '5px solid #059669'; // Borda verde
-                    divButton.setAttribute('title', `✅ Protocolo ${protocolo}: Sincronizado e Resolvido`);
-                } else {
-                    // AZUL CLARO (Pendente)
-                    divButton.style.backgroundColor = '#dbeafe'; // bg-blue-100
-                    divButton.style.borderLeft = '5px solid #2563eb'; // Borda azul
-                    divButton.setAttribute('title', `⚠️ Protocolo ${protocolo}: Sincronizado (Pendente)`);
-                }
-            }
+            // Adiciona à lista de busca
+            itemsToFetch.push({ element: link, id: protocolo });
+            idsToFetch.push(protocolo);
         }
     });
+
+    // Se não há nada novo para buscar, sai
+    if (idsToFetch.length === 0) return;
+
+    // console.log(`[GRID] Buscando ${idsToFetch.length} protocolos em lote...`);
+
+    // 2ª Passada: Consultar API e Atualizar Interface
+    const apiDataMap = await checkBatchExistingData(idsToFetch);
+
+    if (apiDataMap) {
+        itemsToFetch.forEach(({ element, id }) => {
+            const data = apiDataMap[id];
+            
+            // Se encontrou dados para este ID
+            if (data) {
+                const divButton = element.querySelector('.color_button');
+                
+                if (divButton) {
+                    divButton.style.transition = 'background-color 0.5s ease, border-left 0.3s ease';
+                    
+                    if (data.resolvido === 1) {
+                        // VERDE CLARO (Resolvido)
+                        divButton.style.backgroundColor = '#d1fae5'; // bg-emerald-100
+                        divButton.style.borderLeft = '5px solid #059669'; // Borda verde
+                        divButton.setAttribute('title', `✅ Protocolo ${id}: Resolvido em ${data.ultimaAtualizacao}`);
+                    } else {
+                        // AZUL CLARO (Pendente)
+                        divButton.style.backgroundColor = '#dbeafe'; // bg-blue-100
+                        divButton.style.borderLeft = '5px solid #2563eb'; // Borda azul
+                        divButton.setAttribute('title', `⚠️ Protocolo ${id}: Sincronizado (Pendente)`);
+                    }
+                }
+            }
+        });
+    }
 }
 
 // --- FIM FUNÇÕES DE GRID ---
@@ -401,6 +457,10 @@ async function injectForm(sourceDocument) {
                     // ATUALIZA A GRID DEPOIS DE SINCRONIZAR (Procura o iframe IFC)
                     const listIframe = document.getElementById('IFC');
                     if (listIframe && listIframe.contentDocument) {
+                        // Precisamos limpar o processado para forçar a re-checagem do item específico
+                        // Como não sabemos qual item específico foi clicado facilmente aqui,
+                        // vamos limpar o set inteiro ou apenas reprocessar a grid
+                        processedGridItems.clear(); // Limpa cache local da grid
                         processIframeGrid(listIframe.contentDocument);
                     }
                 }
@@ -457,31 +517,35 @@ window.addEventListener('load', () => {
     } else if (pathname.includes('mensagensV1.aspx')) {
         console.log('[DEBUG GLOBAL] Página de listagem (mensagensV1) detectada.');
         
-        // --- INICIA MONITORAMENTO DA GRID NO IFRAME 'IFC' ---
+        // --- NOVA FUNCIONALIDADE: Processar grid na página principal ---
         initGridMonitoring();
-        // ----------------------------------------------------
+        // ---------------------------------------------------------------
 
         const iframe = document.getElementById('IFRAME_DETALHE');
         if (iframe) {
-            console.log('[DEBUG GLOBAL] Iframe de Detalhes encontrado.');
+            console.log('[DEBUG GLOBAL] Iframe encontrado na página de listagem.');
             iframe.addEventListener('load', () => {
+                console.log('[DEBUG GLOBAL] Iframe disparou evento LOAD.');
                 try {
                     const extractedData = extractData(iframe.contentDocument);
                     if (typeof extractedData.protocolo === 'number') {
                         injectForm(iframe.contentDocument);
                     }
                 } catch (e) {
-                    console.error("Erro ao acessar contentDocument do iframe:", e);
+                    console.error("[DEBUG GLOBAL] Erro ao acessar contentDocument do iframe:", e);
                 }
             });
             setTimeout(() => {
                 if (iframe.contentDocument && iframe.contentDocument.readyState === 'complete') {
+                    console.log('[DEBUG GLOBAL] Timeout fallback: Iframe completo, tentando injetar.');
                     const extractedData = extractData(iframe.contentDocument);
                     if (typeof extractedData.protocolo === 'number') {
                         injectForm(iframe.contentDocument);
                     }
                 }
             }, 500);
+        } else {
+            console.log('[DEBUG GLOBAL] Iframe NÃO encontrado na página de listagem.');
         }
     }
 });
