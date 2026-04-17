@@ -412,55 +412,16 @@ async function injectForm(sourceDocument) {
     const allUnitOccurrences = await checkUnitData(extractedData.bloco, extractedData.unidade) || [];
     const others = allUnitOccurrences.filter(o => o.id != extractedData.protocolo);
 
-    // 3. Gerenciamento do Carrossel (Histórico de Ocorrências)
-    // Remove carrossel antigo
-    document.querySelectorAll('.condominio-stack-card').forEach(el => el.remove());
+    // 3. Limpeza e Preparação
+    masterContainer.innerHTML = ''; // Limpa o form anterior
+    document.querySelectorAll('.condominio-stack-card').forEach(el => el.remove()); // Remove orelhas antigas
 
     const modalContent = document.getElementById('DETALHE');
     const modalContainer = modalContent ? modalContent.closest('.ui-dialog') : null;
-
-    // Se estiver em um modal, anexa ao modal. Senão, anexa ao nosso masterContainer.
-    const targetForCards = modalContainer || masterContainer;
     const isDirectView = !modalContainer;
+    const targetForCards = modalContainer || masterContainer;
 
-    if (targetForCards && others.length > 0) {
-        others.slice(0, 5).forEach((occ, index) => {
-            const bgCard = document.createElement('div');
-            bgCard.className = 'stack-card condominio-stack-card';
-            
-            if (isDirectView) {
-                // Na visão direta, as orelhinhas "espiam" pelo lado esquerdo do nosso form
-                bgCard.style.top = `${10 + (index * 60)}px`;
-                bgCard.style.right = `280px`; // Garantir que espie pelo lado esquerdo do form (que tem 300px)
-                bgCard.style.zIndex = -1 - index;
-            } else {
-                // No modal, espiam pelo lado esquerdo do modal
-                bgCard.style.top = `${60 + (index * 70)}px`;
-                bgCard.style.left = `-160px`;
-                bgCard.style.zIndex = -1 - index;
-            }
-            
-            bgCard.innerHTML = `
-                <div style="font-size: 0.75em; font-weight: 600;">#${occ.id}</div>
-                <div style="font-size: 0.65em; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${occ.status}</div>
-                <div style="font-size: 0.6em; color: #4f46e5; margin-top: 4px;">Clique para abrir</div>
-            `;
-            
-            bgCard.addEventListener('click', () => {
-                if (isDirectView) {
-                    window.location.href = occ.url;
-                } else {
-                    const iframe = document.getElementById('IFRAME_DETALHE');
-                    if (iframe) iframe.src = occ.url;
-                }
-            });
-            
-            targetForCards.appendChild(bgCard);
-        });
-    }
-
-    // 4. Constrói/Atualiza o Form Principal
-    masterContainer.innerHTML = '';
+    // 4. Constrói o Form Principal (Sempre no masterContainer)
     const formCard = document.createElement('div');
     formCard.className = 'main-form-card';
     
@@ -501,12 +462,42 @@ async function injectForm(sourceDocument) {
 
     masterContainer.appendChild(formCard);
 
+    // 5. Constrói as Orelhinhas (Histórico)
+    if (targetForCards && others.length > 0) {
+        others.slice(0, 5).forEach((occ, index) => {
+            const bgCard = document.createElement('div');
+            bgCard.className = 'stack-card condominio-stack-card';
+            
+            if (isDirectView) {
+                bgCard.style.top = `${10 + (index * 65)}px`;
+                bgCard.style.right = `285px`; 
+            } else {
+                bgCard.style.top = `${60 + (index * 70)}px`;
+                bgCard.style.left = `-160px`;
+            }
+            bgCard.style.zIndex = -1 - index;
+            
+            bgCard.innerHTML = `
+                <div style="font-size: 0.75em; font-weight: 600;">#${occ.id}</div>
+                <div style="font-size: 0.65em; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${occ.status}</div>
+                <div style="font-size: 0.6em; color: #4f46e5; margin-top: 4px;">Clique para abrir</div>
+            `;
+            
+            bgCard.addEventListener('click', () => {
+                if (isDirectView) window.location.href = occ.url;
+                else if (document.getElementById('IFRAME_DETALHE')) document.getElementById('IFRAME_DETALHE').src = occ.url;
+            });
+            
+            targetForCards.appendChild(bgCard);
+        });
+    }
+
     // Eventos
     const responsabilidadeSelect = formCard.querySelector('#responsabilidadeSelect');
     formCard.querySelector('.close-btn').addEventListener('click', () => masterContainer.remove());
     
     formCard.querySelector('#sendDataBtn').addEventListener('click', async () => {
-        // Lógica de sincronização (mesma da versão anterior)
+        // Lógica de sincronização
         const feedbackContainer = formCard.querySelector('#feedbackIcons');
         feedbackContainer.innerHTML = '<span class="material-icons" style="animation: spin 1s infinite linear">sync</span>';
 
