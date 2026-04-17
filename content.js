@@ -412,21 +412,33 @@ async function injectForm(sourceDocument) {
     const allUnitOccurrences = await checkUnitData(extractedData.bloco, extractedData.unidade) || [];
     const others = allUnitOccurrences.filter(o => o.id != extractedData.protocolo);
 
-    // 3. Gerenciamento do Carrossel (Atrás do Modal do Sistema)
+    // 3. Gerenciamento do Carrossel (Histórico de Ocorrências)
     // Remove carrossel antigo
     document.querySelectorAll('.condominio-stack-card').forEach(el => el.remove());
 
     const modalContent = document.getElementById('DETALHE');
     const modalContainer = modalContent ? modalContent.closest('.ui-dialog') : null;
 
-    if (modalContainer && others.length > 0) {
+    // Se estiver em um modal, anexa ao modal. Senão, anexa ao nosso masterContainer.
+    const targetForCards = modalContainer || masterContainer;
+    const isDirectView = !modalContainer;
+
+    if (targetForCards && others.length > 0) {
         others.slice(0, 5).forEach((occ, index) => {
             const bgCard = document.createElement('div');
             bgCard.className = 'stack-card condominio-stack-card';
-            // Posiciona atrás do modal, saindo pela esquerda
-            bgCard.style.top = `${60 + (index * 70)}px`;
-            bgCard.style.left = `-160px`; // Fica "escondido" atrás e sai um pouco
-            bgCard.style.zIndex = -1 - index;
+            
+            if (isDirectView) {
+                // Na visão direta, as orelhinhas "espiam" pelo lado esquerdo do nosso form
+                bgCard.style.top = `${10 + (index * 60)}px`;
+                bgCard.style.right = `280px`; // Garantir que espie pelo lado esquerdo do form (que tem 300px)
+                bgCard.style.zIndex = -1 - index;
+            } else {
+                // No modal, espiam pelo lado esquerdo do modal
+                bgCard.style.top = `${60 + (index * 70)}px`;
+                bgCard.style.left = `-160px`;
+                bgCard.style.zIndex = -1 - index;
+            }
             
             bgCard.innerHTML = `
                 <div style="font-size: 0.75em; font-weight: 600;">#${occ.id}</div>
@@ -435,11 +447,15 @@ async function injectForm(sourceDocument) {
             `;
             
             bgCard.addEventListener('click', () => {
-                const iframe = document.getElementById('IFRAME_DETALHE');
-                if (iframe) iframe.src = occ.url;
+                if (isDirectView) {
+                    window.location.href = occ.url;
+                } else {
+                    const iframe = document.getElementById('IFRAME_DETALHE');
+                    if (iframe) iframe.src = occ.url;
+                }
             });
             
-            modalContainer.appendChild(bgCard);
+            targetForCards.appendChild(bgCard);
         });
     }
 
