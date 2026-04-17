@@ -180,7 +180,7 @@ async function processIframeGrid(doc) {
 
                     if (data.resolvido === 1) {
                         // VERDE CLARO (Resolvido)
-                        divButton.style.backgroundColor = '#0add3fff'; // bg-emerald-100
+                        divButton.style.backgroundColor = '#d1fae5'; // bg-emerald-100
                         divButton.style.borderLeft = '5px solid #059669'; // Borda verde
                         divButton.setAttribute('title', `✅ Protocolo ${id}: Resolvido em ${data.ultimaAtualizacao}`);
                     } else {
