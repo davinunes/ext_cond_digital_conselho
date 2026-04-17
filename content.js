@@ -292,6 +292,18 @@ async function checkExistingData(protocolo) {
     } catch (error) { return null; }
 }
 
+async function checkUnitData(bloco, unidade) {
+    if (!bloco || !unidade) return null;
+    const checkUrl = `https://mini.davinunes.eti.br/ocorrenciasCondominioDigital/check.php?bloco=${bloco}&unidade=${unidade}`;
+    try {
+        const response = await fetch(checkUrl, { cache: 'no-cache' });
+        if (!response.ok) return null;
+        const result = await response.json();
+        if (result.status === 'success' && result.data) return result.data;
+        return null;
+    } catch (error) { return null; }
+}
+
 function updateDisplayedData(extractedData) {
     const displayProtocolo = document.getElementById('displayProtocolo');
     const displayDataHora = document.getElementById('displayDataHora');
@@ -328,175 +340,244 @@ function fillFormFromApi(apiData) {
 
 async function injectForm(sourceDocument) {
     const extractedData = extractData(sourceDocument);
-    let formContainer = document.getElementById('condominio-extension-form');
+    let masterContainer = document.getElementById('condominio-extension-master');
 
     if (typeof extractedData.protocolo !== 'number' || extractedData.protocolo === 0) {
-        if (formContainer) formContainer.remove();
+        if (masterContainer) masterContainer.remove();
         return;
     }
+
+    // Busca todas as ocorrências da unidade para o carrossel/pilha
+    const allUnitOccurrences = await checkUnitData(extractedData.bloco, extractedData.unidade) || [];
+    const others = allUnitOccurrences.filter(o => o.id != extractedData.protocolo);
     
-    if (!formContainer) {
-        formContainer = document.createElement('div');
-        formContainer.id = 'condominio-extension-form';
-        formContainer.style.cssText = `position: fixed; bottom: 20px; right: 20px; background-color: #f0f4f8; border: 1px solid #d1d9e6; border-radius: 12px; padding: 20px; box-shadow: 0 8px 16px rgba(0, 0, 0, 0.2); z-index: 10000; font-family: 'Inter', sans-serif; color: #334155; max-width: 300px; display: flex; flex-direction: column; gap: 15px;`;
-
-        formContainer.innerHTML = `
-            <style>
-                @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
-                @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
-                #condominio-extension-form h3 { margin-top: 0; margin-bottom: 15px; color: #1e293b; font-weight: 600; font-size: 1.2em; }
-                #condominio-extension-form .extracted-data { background-color: #e2e8f0; padding: 10px; border-radius: 8px; font-size: 0.9em; color: #475569; display: flex; flex-direction: column; gap: 5px; }
-                #condominio-extension-form label { display: flex; align-items: center; gap: 8px; font-size: 0.95em; cursor: pointer; color: #475569; }
-                #condominio-extension-form input[type="checkbox"] { width: 18px; height: 18px; accent-color: #4f46e5; border-radius: 4px; }
-                #condominio-extension-form button { background-color: #e2e8f0; color: #475569; padding: 12px 20px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600; transition: background-color 0.3s ease, color 0.3s ease, transform 0.1s ease; box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1); }
-                #condominio-extension-form button:hover { background-color: #d1d9e6; transform: translateY(-2px); }
-                #condominio-extension-form button:active { transform: translateY(0); box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1); }
-                #condominio-extension-form .feedback-icons { display: flex; justify-content: space-around; align-items: center; margin-top: 10px; min-height: 24px; }
-                #condominio-extension-form .feedback-icon { font-family: 'Material Icons'; font-size: 24px; line-height: 1; animation: fadeOut 3s forwards; }
-                #condominio-extension-form .feedback-icon.success { color: #16a34a; }
-                #condominio-extension-form .feedback-icon.error { color: #dc2626; }
-                @keyframes fadeOut { 0% { opacity: 1; } 80% { opacity: 1; } 100% { opacity: 0; } }
-                #condominio-extension-form .close-button { position: absolute; top: 10px; right: 10px; background: none; border: none; font-size: 1.5em; color: #94a3b8; cursor: pointer; line-height: 1; }
-                #condominio-extension-form .close-button:hover { color: #64748b; }
-                #displayIframeUrl { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; max-width: 100%; display: block; }
-                .form-group { display: flex; flex-direction: column; gap: 8px; }
-                select { width: 100%; padding: 5px; border-radius: 8px; border: 1px solid #cbd5e1; background-color: white; transition: all 0.3s ease; }
-            </style>
-            <h3>Registrar Ocorrência</h3>
-            <div class="extracted-data">
-                <span id="displayProtocolo"></span> <span id="displayDataHora"></span> <span id="displayBloco"></span> <span id="displayUnidade"></span> <span id="displayStatus"></span> <span id="displayIframeUrl"></span>
-            </div>
-            <label> <input type="checkbox" id="chkSubsindico"> Interação Subsíndico </label>
-            <label> <input type="checkbox" id="chkSindico"> Interação Síndico </label>
-            <label> <input type="checkbox" id="chkAdm"> Interação Adm. </label>
-            <label> <input type="checkbox" id="chkResolvido"> Resolvido </label>
-            <div class="form-group mt-3">
-                <label class="text-sm" for="responsabilidadeSelect">Responsabilidade:</label>
-                <select id="responsabilidadeSelect"> <option value="null">Não Atribuído</option> <option value="sub">Subsíndico</option> <option value="sindico">Síndico</option> </select>
-            </div>
-            <button id="sendDataBtn" class="mt-4">Sincronizar</button>
-            <div id="feedbackIcons" class="feedback-icons"></div>
-            <button class="close-button">&times;</button>
-        `;
-
-        document.body.appendChild(formContainer);
-
-        // Lógica de Feedback Visual do Select
-        const responsabilidadeSelect = document.getElementById('responsabilidadeSelect');
-        const updateSelectStyle = () => {
-            if (responsabilidadeSelect.value !== 'null' && responsabilidadeSelect.value !== '') {
-                responsabilidadeSelect.style.borderColor = '#4f46e5';
-                responsabilidadeSelect.style.backgroundColor = '#e0e7ff';
-                responsabilidadeSelect.style.color = '#1e3a8a';
-                responsabilidadeSelect.style.fontWeight = '600';
-            } else {
-                responsabilidadeSelect.style.borderColor = '#cbd5e1';
-                responsabilidadeSelect.style.backgroundColor = 'white';
-                responsabilidadeSelect.style.color = 'black';
-                responsabilidadeSelect.style.fontWeight = 'normal';
-            }
-        };
-        responsabilidadeSelect.addEventListener('change', updateSelectStyle);
-
-        document.getElementById('sendDataBtn').addEventListener('click', async () => {
-            let currentExtractedData;
-            const iframe = document.getElementById('IFRAME_DETALHE');
-            if (iframe && iframe.contentDocument) {
-                currentExtractedData = extractData(iframe.contentDocument);
-            } else {
-                currentExtractedData = extractData(document);
-            }
-
-            const formData = new URLSearchParams();
-            formData.append('id', currentExtractedData.protocolo);
-            formData.append('abertura', currentExtractedData.dataHora);
-            formData.append('bloco', currentExtractedData.bloco);
-            formData.append('unidade', currentExtractedData.unidade);
-            formData.append('url', currentExtractedData.iframeUrl);
-            formData.append('status', currentExtractedData.status);
-            formData.append('total_mensagens', currentExtractedData.total_mensagens);
-            formData.append('data_ultima_mensagem', currentExtractedData.data_ultima_mensagem);
-            
-            formData.append('subsindico', document.getElementById('chkSubsindico').checked ? 'Sim' : 'Não');
-            formData.append('sindico', document.getElementById('chkSindico').checked ? 'Sim' : 'Não');
-            
-            const responsabilidadeValue = responsabilidadeSelect.value === 'null' ? '' : responsabilidadeSelect.value;
-            formData.append('responsabilidade', responsabilidadeValue);
-
-            formData.append('adm', document.getElementById('chkAdm').checked ? 'Sim' : 'Não');
-            formData.append('resolvido', document.getElementById('chkResolvido').checked ? 'Sim' : 'Não');
-
-            const feedbackIconsContainer = document.getElementById('feedbackIcons');
-            feedbackIconsContainer.innerHTML = '';
-
-            const phpWebhookUrl = 'https://mini.davinunes.eti.br/ocorrenciasCondominioDigital/upsert.php';
-
-            try {
-                const response = await fetch(phpWebhookUrl, {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
-                    body: formData.toString()
-                });
-
-                let result;
-                try { result = await response.json(); } catch (e) { result = { status: 'error', message: 'Resposta inválida.' }; }
-
-                const success = response.ok && result.status === 'success';
-                const icon = document.createElement('span');
-                icon.className = 'feedback-icon material-icons';
-                icon.textContent = success ? 'check_circle' : 'cancel';
-                icon.classList.add(success ? 'success' : 'error');
-                icon.title = success ? `Sucesso: ${result.action} - ID: ${result.id}` : `Erro: ${result.message}`;
-                feedbackIconsContainer.appendChild(icon);
-
-                if (success) {
-                    // Se sucesso, atualiza o formulário e também reprocessa a grid no iframe
-                    if (iframe && iframe.contentDocument) injectForm(iframe.contentDocument);
-                    else injectForm(document);
-                    
-                    // ATUALIZA A GRID DEPOIS DE SINCRONIZAR (Procura o iframe IFC)
-                    const listIframe = document.getElementById('IFC');
-                    if (listIframe && listIframe.contentDocument) {
-                        // Precisamos limpar o processado para forçar a re-checagem do item específico
-                        // Como não sabemos qual item específico foi clicado facilmente aqui,
-                        // vamos limpar o set inteiro ou apenas reprocessar a grid
-                        processedGridItems.clear(); // Limpa cache local da grid
-                        processIframeGrid(listIframe.contentDocument);
-                    }
-                }
-            } catch (error) {
-                const errorIcon = document.createElement('span');
-                errorIcon.className = 'feedback-icon material-icons error';
-                errorIcon.textContent = 'error'; errorIcon.title = 'Erro de rede.';
-                feedbackIconsContainer.appendChild(errorIcon);
-            }
-        });
-
-        document.querySelector('#condominio-extension-form .close-button').addEventListener('click', () => {
-            formContainer.remove();
-        });
+    if (!masterContainer) {
+        masterContainer = document.createElement('div');
+        masterContainer.id = 'condominio-extension-master';
+        masterContainer.style.cssText = `position: fixed; bottom: 20px; right: 20px; z-index: 10000; width: 340px; height: 500px; display: flex; align-items: flex-end; justify-content: flex-end; pointer-events: none;`;
+        document.body.appendChild(masterContainer);
     }
-    
-    updateDisplayedData(extractedData);
-    
-    const existingData = await checkExistingData(extractedData.protocolo);
-    
-    if (existingData) {
-        formContainer.style.backgroundColor = '#bbf7d0';
-        fillFormFromApi(existingData);
-    } else {
-        formContainer.style.backgroundColor = '#f0f4f8';
-        if (formContainer) {
-            document.getElementById('chkAdm').checked = false;
-            document.getElementById('chkResolvido').checked = false;
-            document.getElementById('chkSubsindico').checked = false;
-            document.getElementById('chkSindico').checked = false;
-            const select = document.getElementById('responsabilidadeSelect');
-            if (select) {
-                select.value = 'null';
-                select.dispatchEvent(new Event('change'));
+
+    // Limpa o conteúdo anterior para reconstruir a pilha
+    masterContainer.innerHTML = `
+        <style>
+            @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;600&display=swap');
+            @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+            
+            .stack-card { 
+                position: absolute; 
+                background-color: #f0f4f8; 
+                border: 1px solid #d1d9e6; 
+                border-radius: 12px; 
+                padding: 15px; 
+                box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15); 
+                font-family: 'Inter', sans-serif; 
+                color: #334155; 
+                transition: all 0.4s cubic-bezier(0.175, 0.885, 0.32, 1.275);
+                pointer-events: auto;
+                cursor: default;
+                width: 300px;
             }
+
+            .card-back {
+                opacity: 0.6;
+                cursor: pointer;
+                filter: grayscale(0.5);
+            }
+
+            .card-back:hover {
+                opacity: 0.9;
+                filter: grayscale(0);
+                transform: translate(-10px, -10px) !important;
+            }
+
+            .card-front {
+                z-index: 100;
+                box-shadow: 0 12px 24px rgba(0, 0, 0, 0.25);
+            }
+
+            #condominio-extension-form h3 { margin: 0 0 15px 0; color: #1e293b; font-weight: 600; font-size: 1.1em; display: flex; justify-content: space-between; align-items: center; }
+            .occurrence-badge { background: #4f46e5; color: white; border-radius: 20px; padding: 2px 8px; font-size: 0.7em; }
+            
+            .extracted-data { background-color: #e2e8f0; padding: 10px; border-radius: 8px; font-size: 0.85em; color: #475569; display: flex; flex-direction: column; gap: 4px; margin-bottom: 12px; }
+            .form-group-check { display: flex; align-items: center; gap: 8px; font-size: 0.9em; cursor: pointer; color: #475569; margin-bottom: 6px; }
+            input[type="checkbox"] { width: 16px; height: 16px; accent-color: #4f46e5; cursor: pointer; }
+            
+            .btn-sync { background-color: #4f46e5; color: white; padding: 10px; border: none; border-radius: 8px; cursor: pointer; font-size: 1em; font-weight: 600; width: 100%; transition: all 0.3s; margin-top: 10px; }
+            .btn-sync:hover { background-color: #4338ca; transform: translateY(-2px); }
+            
+            .close-button { background: none; border: none; font-size: 1.2em; color: #94a3b8; cursor: pointer; transition: color 0.2s; }
+            .close-button:hover { color: #64748b; }
+            
+            .feedback-icons { display: flex; justify-content: center; height: 30px; margin-top: 5px; }
+            .material-icons { font-size: 24px; }
+            .success { color: #16a34a; }
+            .error { color: #dc2626; }
+
+            .other-info { font-size: 0.75em; color: #64748b; margin-top: 4px; border-top: 1px solid #cbd5e1; padding-top: 4px; }
+            
+            select { width: 100%; padding: 6px; border-radius: 6px; border: 1px solid #cbd5e1; background-color: white; font-size: 0.9em; }
+
+            @keyframes slideIn { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+            @keyframes spin { from { transform: rotate(0deg); } to { transform: rotate(360deg); } }
+        </style>
+    `;
+
+    // 1. Adiciona os cartões de fundo (Outras ocorrências)
+    others.slice(0, 3).reverse().forEach((occ, index) => {
+        const offset = (index + 1) * 15;
+        const bgCard = document.createElement('div');
+        bgCard.className = 'stack-card card-back';
+        bgCard.style.zIndex = 50 - index;
+        bgCard.style.transform = `translate(-${offset}px, -${offset}px)`;
+        
+        bgCard.innerHTML = `
+            <div style="font-size: 0.8em; font-weight: 600;">Protocolo: ${occ.id}</div>
+            <div style="font-size: 0.7em; color: #64748b;">Status: ${occ.status}</div>
+            <div style="font-size: 0.6em; color: #94a3b8; margin-top: 5px;">Clique para ver</div>
+        `;
+        
+        bgCard.addEventListener('click', () => {
+            if (occ.url) {
+                const iframe = document.getElementById('IFRAME_DETALHE');
+                if (iframe) {
+                    iframe.src = occ.url;
+                } else {
+                    window.location.href = occ.url;
+                }
+            }
+        });
+        
+        masterContainer.appendChild(bgCard);
+    });
+
+    // 2. Cria o cartão principal (Front)
+    const formCard = document.createElement('div');
+    formCard.id = 'condominio-extension-form';
+    formCard.className = 'stack-card card-front';
+    
+    const countBadge = allUnitOccurrences.length > 0 ? `<span class="occurrence-badge">${allUnitOccurrences.length}</span>` : '';
+    
+    formCard.innerHTML = `
+        <h3>
+            <span>Registrar Ocorrência ${countBadge}</span>
+            <button class="close-button">&times;</button>
+        </h3>
+        <div class="extracted-data">
+            <b id="displayProtocolo">Protocolo: ${extractedData.protocolo}</b>
+            <span id="displayDataHora" style="font-size: 0.9em;">${extractedData.dataHora}</span>
+            <div style="display: flex; gap: 10px; margin-top: 4px; border-top: 1px solid #cbd5e1; padding-top: 4px;">
+                <span id="displayBloco">B: ${extractedData.bloco}</span>
+                <span id="displayUnidade">U: ${extractedData.unidade}</span>
+            </div>
+            <span id="displayStatus" style="font-size: 0.9em; color: #4f46e5; font-weight: 600;">${extractedData.status}</span>
+        </div>
+        
+        <label class="form-group-check"> <input type="checkbox" id="chkSubsindico"> Interação Subsíndico </label>
+        <label class="form-group-check"> <input type="checkbox" id="chkSindico"> Interação Síndico </label>
+        <label class="form-group-check"> <input type="checkbox" id="chkAdm"> Interação Adm. </label>
+        <label class="form-group-check"> <input type="checkbox" id="chkResolvido"> Resolvido </label>
+        
+        <div style="margin-top: 8px;">
+            <label style="font-size: 0.8em; color: #64748b; display: block; margin-bottom: 2px;">Responsabilidade:</label>
+            <select id="responsabilidadeSelect"> 
+                <option value="null">Não Atribuído</option> 
+                <option value="sub">Subsíndico</option> 
+                <option value="sindico">Síndico</option> 
+            </select>
+        </div>
+        
+        <button id="sendDataBtn" class="btn-sync">Sincronizar</button>
+        <div id="feedbackIcons" class="feedback-icons"></div>
+    `;
+
+    masterContainer.appendChild(formCard);
+
+    // Eventos do formulário
+    const responsabilidadeSelect = formCard.querySelector('#responsabilidadeSelect');
+    const updateSelectStyle = () => {
+        if (responsabilidadeSelect.value !== 'null') {
+            responsabilidadeSelect.style.borderColor = '#4f46e5';
+            responsabilidadeSelect.style.backgroundColor = '#eef2ff';
+            responsabilidadeSelect.style.fontWeight = '600';
+        } else {
+            responsabilidadeSelect.style.borderColor = '#cbd5e1';
+            responsabilidadeSelect.style.backgroundColor = 'white';
+            responsabilidadeSelect.style.fontWeight = 'normal';
         }
+    };
+    responsabilidadeSelect.addEventListener('change', updateSelectStyle);
+
+    formCard.querySelector('.close-button').addEventListener('click', () => {
+        masterContainer.remove();
+    });
+
+    formCard.querySelector('#sendDataBtn').addEventListener('click', async () => {
+        let currentExtractedData;
+        const iframe = document.getElementById('IFRAME_DETALHE');
+        if (iframe && iframe.contentDocument) {
+            currentExtractedData = extractData(iframe.contentDocument);
+        } else {
+            currentExtractedData = extractData(document);
+        }
+
+        const formData = new URLSearchParams();
+        formData.append('id', currentExtractedData.protocolo);
+        formData.append('abertura', currentExtractedData.dataHora);
+        formData.append('bloco', currentExtractedData.bloco);
+        formData.append('unidade', currentExtractedData.unidade);
+        formData.append('url', currentExtractedData.iframeUrl);
+        formData.append('status', currentExtractedData.status);
+        formData.append('total_mensagens', currentExtractedData.total_mensagens);
+        formData.append('data_ultima_mensagem', currentExtractedData.data_ultima_mensagem);
+        
+        formData.append('subsindico', formCard.querySelector('#chkSubsindico').checked ? 'Sim' : 'Não');
+        formData.append('sindico', formCard.querySelector('#chkSindico').checked ? 'Sim' : 'Não');
+        formData.append('adm', formCard.querySelector('#chkAdm').checked ? 'Sim' : 'Não');
+        formData.append('resolvido', formCard.querySelector('#chkResolvido').checked ? 'Sim' : 'Não');
+
+        const respValue = responsabilidadeSelect.value === 'null' ? '' : responsabilidadeSelect.value;
+        formData.append('responsabilidade', respValue);
+
+        const feedbackIconsContainer = formCard.querySelector('#feedbackIcons');
+        feedbackIconsContainer.innerHTML = '<span class="material-icons" style="animation: spin 1s infinite linear">sync</span>';
+
+        try {
+            const response = await fetch('https://mini.davinunes.eti.br/ocorrenciasCondominioDigital/upsert.php', {
+                method: 'POST',
+                headers: { 'Content-Type': 'application/x-www-form-urlencoded' },
+                body: formData.toString()
+            });
+
+            const result = await response.json();
+            const success = response.ok && result.status === 'success';
+            
+            feedbackIconsContainer.innerHTML = `<span class="material-icons ${success ? 'success' : 'error'}">${success ? 'check_circle' : 'cancel'}</span>`;
+            
+            if (success) {
+                // Se sucesso, recarrega o estado do form e a grid
+                injectForm(sourceDocument);
+                const listIframe = document.getElementById('IFC');
+                if (listIframe && listIframe.contentDocument) {
+                    processedGridItems.clear();
+                    processIframeGrid(listIframe.contentDocument);
+                }
+            }
+        } catch (error) {
+            feedbackIconsContainer.innerHTML = '<span class="material-icons error">error</span>';
+        }
+    });
+
+    // Inicializa dados do banco no form
+    const existingInDb = allUnitOccurrences.find(o => o.id == extractedData.protocolo);
+    if (existingInDb) {
+        formCard.style.backgroundColor = '#ecfdf5'; // Verde bem clarinho
+        formCard.querySelector('#chkSubsindico').checked = existingInDb.sub === 1;
+        formCard.querySelector('#chkSindico').checked = existingInDb.sindico === 1;
+        formCard.querySelector('#chkAdm').checked = existingInDb.adm === 1;
+        formCard.querySelector('#chkResolvido').checked = existingInDb.resolvido === 1;
+        responsabilidadeSelect.value = existingInDb.responsabilidade || 'null';
+        updateSelectStyle();
     }
 }
 
