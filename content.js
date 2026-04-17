@@ -9,24 +9,24 @@ let gridDebounceTimer; // Controle de debounce do observer
 // Função principal que inicia o monitoramento
 function initGridMonitoring() {
     console.log('[GRID] 🚀 Iniciando monitoramento da grid (via Iframe IFC)...');
-    
+
     // Função recursiva para encontrar o iframe
     const findAndAttachToIframe = () => {
         const iframe = document.getElementById('IFC');
-        
+
         if (iframe) {
             console.log('[GRID] ✅ Iframe IFC encontrado.');
-            
+
             // Função para configurar o observer DENTRO do iframe
             const setupObserver = () => {
                 try {
                     // Tenta acessar o documento interno do iframe
                     const doc = iframe.contentDocument || iframe.contentWindow.document;
-                    
+
                     // Verifica se o documento está pronto e acessível
                     if (doc && doc.readyState === 'complete' && doc.body) {
                         console.log('[GRID] 📄 Documento do iframe acessível e pronto.');
-                        
+
                         // 1. Processa a grid imediatamente
                         processIframeGrid(doc);
 
@@ -46,10 +46,10 @@ function initGridMonitoring() {
                                 }, 500);
                             }
                         });
-                        
+
                         observer.observe(doc.body, { childList: true, subtree: true });
                         console.log('[GRID] 👀 Observer anexado ao corpo do iframe.');
-                        
+
                     } else {
                         // Se o doc não estiver pronto, tenta de novo em breve
                         setTimeout(setupObserver, 1000);
@@ -62,7 +62,7 @@ function initGridMonitoring() {
 
             // Tenta configurar agora (caso já esteja carregado)
             setupObserver();
-            
+
             // E garante que configure também quando o evento 'load' disparar (recarregamentos)
             iframe.addEventListener('load', () => {
                 console.log('[GRID] 🔄 Evento load do iframe disparado.');
@@ -104,7 +104,7 @@ async function checkBatchExistingData(ids) {
 
         const result = await response.json();
         console.log('[GRID API] 📩 Resposta do lote:', result); // DEBUG: Resposta da API
-        
+
         if (result.status === 'success' && result.data) {
             // Transforma o array de resultados em um objeto indexado pelo ID para acesso rápido
             // Ex: { 123: {id: 123, resolvido: 1...}, 456: {id: 456, resolvido: 0...} }
@@ -125,7 +125,7 @@ async function checkBatchExistingData(ids) {
 async function processIframeGrid(doc) {
     // Busca links que tenham ID e contenham o padrão de controle da lista
     const items = doc.querySelectorAll('a[id*="lvLista_ctrl"][id$="_lnkEdit"]');
-    
+
     if (items.length === 0) return;
 
     // Arrays para armazenar o que precisamos processar
@@ -135,7 +135,7 @@ async function processIframeGrid(doc) {
     // 1ª Passada: Coletar IDs que precisam ser verificados
     items.forEach((link) => {
         const linkId = link.getAttribute('id');
-        
+
         // Se já processamos este elemento específico (pelo ID do DOM), pula
         // Nota: Usamos dataset no elemento para controlar o estado visual
         if (link.dataset.processed === 'true') return;
@@ -146,13 +146,13 @@ async function processIframeGrid(doc) {
 
         const textContent = infoDiv.textContent || "";
         const match = textContent.match(/^(\d+)\s*\|/);
-        
+
         if (match && match[1]) {
             const protocolo = parseInt(match[1], 10);
-            
+
             // Marca como processado para não pegar na próxima varredura do observer
             link.dataset.processed = 'true';
-            
+
             // Adiciona à lista de busca
             itemsToFetch.push({ element: link, id: protocolo });
             idsToFetch.push(protocolo);
@@ -170,17 +170,17 @@ async function processIframeGrid(doc) {
     if (apiDataMap) {
         itemsToFetch.forEach(({ element, id }) => {
             const data = apiDataMap[id];
-            
+
             // Se encontrou dados para este ID
             if (data) {
                 const divButton = element.querySelector('.color_button');
-                
+
                 if (divButton) {
                     divButton.style.transition = 'background-color 0.5s ease, border-left 0.3s ease';
-                    
+
                     if (data.resolvido === 1) {
                         // VERDE CLARO (Resolvido)
-                        divButton.style.backgroundColor = '#d1fae5'; // bg-emerald-100
+                        divButton.style.backgroundColor = '#0add3fff'; // bg-emerald-100
                         divButton.style.borderLeft = '5px solid #059669'; // Borda verde
                         divButton.setAttribute('title', `✅ Protocolo ${id}: Resolvido em ${data.ultimaAtualizacao}`);
                     } else {
@@ -221,7 +221,7 @@ function extractData(contextDocument) {
     const data = {};
     const protocoloElement = contextDocument.getElementById('ctl00_conteudo_lblProtocolo');
     const dataHoraElement = contextDocument.getElementById('ctl00_conteudo_lblEm');
-    const perfilOcorrenciaDiv = contextDocument.querySelector('.perfil_ocorrencia'); 
+    const perfilOcorrenciaDiv = contextDocument.querySelector('.perfil_ocorrencia');
     const statusSelectElement = contextDocument.getElementById('ctl00_conteudo_ddlStatus');
     const comentGridDiv = contextDocument.querySelector('.coment-grid');
 
@@ -259,8 +259,8 @@ function extractData(contextDocument) {
         }
     }
 
-    data.status = statusSelectElement && statusSelectElement.options[statusSelectElement.selectedIndex] ? 
-                  statusSelectElement.options[statusSelectElement.selectedIndex].textContent : 'Não encontrado';
+    data.status = statusSelectElement && statusSelectElement.options[statusSelectElement.selectedIndex] ?
+        statusSelectElement.options[statusSelectElement.selectedIndex].textContent : 'Não encontrado';
 
     const iframe = document.getElementById('IFRAME_DETALHE');
     data.iframeUrl = iframe && iframe.src ? iframe.src : window.location.href;
@@ -307,9 +307,9 @@ async function checkUnitData(bloco, unidade) {
 function updateDisplayedData(extractedData) {
     const displayProtocolo = document.getElementById('displayProtocolo');
     const displayDataHora = document.getElementById('displayDataHora');
-    const theDisplayBloco = document.getElementById('displayBloco'); 
-    const displayUnidade = document.getElementById('displayUnidade'); 
-    const displayStatus = document.getElementById('displayStatus');   
+    const theDisplayBloco = document.getElementById('displayBloco');
+    const displayUnidade = document.getElementById('displayUnidade');
+    const displayStatus = document.getElementById('displayStatus');
     const displayIframeUrl = document.getElementById('displayIframeUrl');
 
     if (displayProtocolo) displayProtocolo.textContent = `Protocolo: ${extractedData.protocolo}`;
@@ -340,7 +340,7 @@ function fillFormFromApi(apiData) {
 
 async function injectForm(sourceDocument) {
     const extractedData = extractData(sourceDocument);
-    
+
     // 1. Gerenciamento do Form de Registro (Canto da tela)
     let masterContainer = document.getElementById('condominio-extension-master');
     if (typeof extractedData.protocolo !== 'number' || extractedData.protocolo === 0) {
@@ -424,9 +424,9 @@ async function injectForm(sourceDocument) {
     // 4. Constrói o Form Principal (Sempre no masterContainer)
     const formCard = document.createElement('div');
     formCard.className = 'main-form-card';
-    
+
     const countBadge = allUnitOccurrences.length > 0 ? `<span class="occurrence-badge">${allUnitOccurrences.length}</span>` : '';
-    
+
     formCard.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 15px;">
             <h3 style="margin: 0; font-size: 1.1em; font-weight: 600;">Registrar Ocorrência ${countBadge}</h3>
@@ -467,27 +467,27 @@ async function injectForm(sourceDocument) {
         others.slice(0, 5).forEach((occ, index) => {
             const bgCard = document.createElement('div');
             bgCard.className = 'stack-card condominio-stack-card';
-            
+
             if (isDirectView) {
                 bgCard.style.top = `${10 + (index * 65)}px`;
-                bgCard.style.right = `285px`; 
+                bgCard.style.right = `285px`;
             } else {
                 bgCard.style.top = `${60 + (index * 70)}px`;
                 bgCard.style.left = `-160px`;
             }
             bgCard.style.zIndex = -1 - index;
-            
+
             bgCard.innerHTML = `
                 <div style="font-size: 0.75em; font-weight: 600;">#${occ.id}</div>
                 <div style="font-size: 0.65em; color: #64748b; white-space: nowrap; overflow: hidden; text-overflow: ellipsis;">${occ.status}</div>
                 <div style="font-size: 0.6em; color: #4f46e5; margin-top: 4px;">Clique para abrir</div>
             `;
-            
+
             bgCard.addEventListener('click', () => {
                 if (isDirectView) window.location.href = occ.url;
                 else if (document.getElementById('IFRAME_DETALHE')) document.getElementById('IFRAME_DETALHE').src = occ.url;
             });
-            
+
             targetForCards.appendChild(bgCard);
         });
     }
@@ -495,7 +495,7 @@ async function injectForm(sourceDocument) {
     // Eventos
     const responsabilidadeSelect = formCard.querySelector('#responsabilidadeSelect');
     formCard.querySelector('.close-btn').addEventListener('click', () => masterContainer.remove());
-    
+
     formCard.querySelector('#sendDataBtn').addEventListener('click', async () => {
         // Lógica de sincronização
         const feedbackContainer = formCard.querySelector('#feedbackIcons');
@@ -541,7 +541,7 @@ async function injectForm(sourceDocument) {
     // Estado inicial
     const existingInDb = allUnitOccurrences.find(o => o.id == extractedData.protocolo);
     if (existingInDb) {
-        formCard.style.backgroundColor = '#ecfdf5';
+        formCard.style.backgroundColor = '#b5fbd3';
         formCard.querySelector('#chkSubsindico').checked = existingInDb.sub === 1;
         formCard.querySelector('#chkSindico').checked = existingInDb.sindico === 1;
         formCard.querySelector('#chkAdm').checked = existingInDb.adm === 1;
@@ -556,17 +556,17 @@ window.addEventListener('load', () => {
     console.log('[DEBUG GLOBAL] Extensão carregada. URL atual:', window.location.href);
 
     const pathname = window.location.pathname;
-    
+
     if (pathname.includes('mensagem_detalhe.aspx')) {
         console.log('[DEBUG GLOBAL] Página de detalhes detectada.');
-        applyDetailPageStyles(); 
+        applyDetailPageStyles();
         const extractedData = extractData(document);
         if (typeof extractedData.protocolo === 'number') {
             injectForm(document);
         }
     } else if (pathname.includes('mensagensV1.aspx')) {
         console.log('[DEBUG GLOBAL] Página de listagem (mensagensV1) detectada.');
-        
+
         // --- NOVA FUNCIONALIDADE: Processar grid na página principal ---
         initGridMonitoring();
         // ---------------------------------------------------------------
