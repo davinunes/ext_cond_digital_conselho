@@ -308,21 +308,42 @@ function processControleAcesso(container) {
 
     rows.forEach(linha => {
         const anchor = linha.querySelector('a[onclick]');
-        if (!anchor) return;
-
-        const onclickStr = anchor.getAttribute('onclick');
+        const spanClick = linha.querySelector('.eventoClick[id]');
         
-        // Evita duplicados baseados no comando exato do onclick
-        if (capturedActionsSet.has(onclickStr)) return;
-        capturedActionsSet.add(onclickStr);
+        if (!anchor && !spanClick) return;
 
-        const nome = (linha.querySelector('.esq.s12.bold.cor') || {textContent: 'N/A'}).textContent.trim();
+        let cmd = "";
+        let isEdit = false;
+
+        if (anchor) {
+            cmd = anchor.getAttribute('onclick');
+        } else if (spanClick) {
+            const clickId = spanClick.getAttribute('id');
+            // Gera um script que simula o clique no contexto da página para aquele ID específico
+            cmd = `(function(){ 
+                let d = document.getElementById('${clickId}'); 
+                if (d) { d.dispatchEvent(new MouseEvent('click', {bubbles:true})); }
+                else { 
+                    // Fallback se o elemento original sumiu: cria um temporário para disparar o evento que o motor espera
+                    let t = document.createElement('span'); t.id='${clickId}'; t.className='eventoClick'; t.style.display='none';
+                    document.body.appendChild(t); t.dispatchEvent(new MouseEvent('click', {bubbles:true})); t.remove();
+                }
+            })()`;
+            isEdit = true;
+        }
+        
+        // Evita duplicados baseados no comando exato
+        if (capturedActionsSet.has(cmd)) return;
+        capturedActionsSet.add(cmd);
+
+        const nome = (linha.querySelector('.esq.s12.bold.cor') || {textContent: 'Identificação NI'}).textContent.trim();
         const local = (linha.querySelector('.s10.t100') || {textContent: ''}).textContent.trim();
         
-        let acao = "Acesso";
+        let acao = isEdit ? "Vincular/Editar" : "Acesso";
         let subacao = "";
         let hora = new Date().toLocaleTimeString();
 
+        // Tenta pegar detalhes na linha de baixo (se existir)
         const proxLinha = linha.nextElementSibling;
         if (proxLinha && proxLinha.classList.contains('linha')) {
             const acaoEl = proxLinha.querySelector('.esq.t70 .s12.bold');
@@ -331,7 +352,7 @@ function processControleAcesso(container) {
 
             if (acaoEl) acao = acaoEl.textContent.trim();
             if (subacaoEl) subacao = subacaoEl.textContent.trim();
-            if (horaEl) hora = horaEl.textContent.trim();
+            if (horaEl && horaEl.textContent.includes(':')) hora = horaEl.textContent.trim();
         }
 
         const actionData = {
@@ -342,7 +363,8 @@ function processControleAcesso(container) {
             acao: acao,
             subacao: subacao,
             hora: hora,
-            cmd: onclickStr
+            cmd: cmd,
+            isEdit: isEdit
         };
 
         addActionToUI(actionData, true);
