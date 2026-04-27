@@ -198,6 +198,250 @@ async function processIframeGrid(doc) {
 // --- FIM FUNÇÕES DE GRID ---
 
 
+// --- MONITORAMENTO DE CONTROLE DE ACESSO (cond.aspx) ---
+
+let capturedActionsSet = new Set(); // Para evitar duplicados na mesma sessão
+
+function initControleAcessoMonitoring() {
+    console.log('[ACESSO] 🚀 Iniciando monitoramento de controle de acesso...');
+
+    // Cria/Garante o container da UI lateral
+    ensureAcessoUI();
+
+    const setupObserver = () => {
+        const targetContainer = document.querySelector('.alert_ca_conteudo');
+        
+        if (targetContainer) {
+            console.log('[ACESSO] ✅ Container de alertas encontrado.');
+            
+            // Processa o que já existe
+            processControleAcesso(targetContainer);
+
+            // Observer para mudanças (novos alertas)
+            const observer = new MutationObserver((mutations) => {
+                let hasNewEntries = false;
+                mutations.forEach(m => {
+                    if (m.addedNodes.length > 0) hasNewEntries = true;
+                });
+                if (hasNewEntries) {
+                    processControleAcesso(targetContainer);
+                }
+            });
+
+            observer.observe(targetContainer, { childList: true, subtree: true });
+        } else {
+            // Tenta de novo em breve se não achou (pode estar carregando via AJAX)
+            setTimeout(setupObserver, 1000);
+        }
+    };
+
+    setupObserver();
+}
+
+function ensureAcessoUI() {
+    if (document.getElementById('ext-acesso-panel')) return;
+
+    const panel = document.createElement('div');
+    panel.id = 'ext-acesso-panel';
+    panel.style.cssText = `
+        position: fixed;
+        top: 20px;
+        left: 20px;
+        width: 350px;
+        max-height: 85vh;
+        background: #ffffff;
+        border: 1px solid #e2e8f0;
+        border-radius: 16px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.15);
+        z-index: 10000;
+        font-family: 'Inter', sans-serif;
+        display: flex;
+        flex-direction: column;
+        overflow: hidden;
+        transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    `;
+
+    panel.innerHTML = `
+        <div style="background: linear-gradient(135deg, #4f46e5 0%, #7c3aed 100%); color: white; padding: 16px; display: flex; justify-content: space-between; align-items: center; cursor: move;">
+            <div style="display: flex; align-items: center; gap: 8px;">
+                <span class="material-icons" style="font-size: 20px;">history</span>
+                <span style="font-weight: 600; font-size: 14px; letter-spacing: 0.5px;">AÇÕES CAPTURADAS</span>
+            </div>
+            <div style="display: flex; gap: 10px;">
+                <span id="ext-acesso-clear" class="material-icons" style="font-size: 18px; cursor: pointer; opacity: 0.8;" title="Limpar tudo">delete_sweep</span>
+                <span id="ext-acesso-toggle" class="material-icons" style="font-size: 18px; cursor: pointer; opacity: 0.8;" title="Minimizar">expand_less</span>
+            </div>
+        </div>
+        <div id="ext-acesso-list" style="padding: 12px; overflow-y: auto; flex-grow: 1; display: flex; flex-direction: column; gap: 10px; background: #f8fafc;">
+            <!-- Itens serão inseridos aqui -->
+            <div id="ext-acesso-empty" style="text-align: center; color: #94a3b8; padding: 20px; font-size: 0.9em;">
+                Nenhuma ação detectada ainda...
+            </div>
+        </div>
+    `;
+
+    document.body.appendChild(panel);
+
+    // Eventos do Painel
+    document.getElementById('ext-acesso-clear').onclick = () => {
+        document.getElementById('ext-acesso-list').innerHTML = '<div id="ext-acesso-empty" style="text-align: center; color: #94a3b8; padding: 20px; font-size: 0.9em;">Nenhuma ação detectada ainda...</div>';
+        localStorage.removeItem('ext_captured_actions_v1');
+        capturedActionsSet.clear();
+    };
+
+    let minimized = false;
+    document.getElementById('ext-acesso-toggle').onclick = (e) => {
+        minimized = !minimized;
+        const list = document.getElementById('ext-acesso-list');
+        list.style.display = minimized ? 'none' : 'flex';
+        e.target.textContent = minimized ? 'expand_more' : 'expand_less';
+        panel.style.height = minimized ? 'auto' : '85vh';
+    };
+
+    // Carregar do localStorage
+    loadStoredActions();
+}
+
+function processControleAcesso(container) {
+    const rows = container.querySelectorAll('.linha');
+    let hasAdded = false;
+
+    rows.forEach(linha => {
+        const anchor = linha.querySelector('a[onclick]');
+        if (!anchor) return;
+
+        const onclickStr = anchor.getAttribute('onclick');
+        
+        // Evita duplicados baseados no comando exato do onclick
+        if (capturedActionsSet.has(onclickStr)) return;
+        capturedActionsSet.add(onclickStr);
+
+        const nome = (linha.querySelector('.esq.s12.bold.cor') || {textContent: 'N/A'}).textContent.trim();
+        const local = (linha.querySelector('.s10.t100') || {textContent: ''}).textContent.trim();
+        
+        let acao = "Acesso";
+        let subacao = "";
+        let hora = new Date().toLocaleTimeString();
+
+        const proxLinha = linha.nextElementSibling;
+        if (proxLinha && proxLinha.classList.contains('linha')) {
+            const acaoEl = proxLinha.querySelector('.esq.t70 .s12.bold');
+            const subacaoEl = proxLinha.querySelector('.esq.t70 .s10');
+            const horaEl = proxLinha.querySelector('.esq.t70 div:last-child');
+
+            if (acaoEl) acao = acaoEl.textContent.trim();
+            if (subacaoEl) subacao = subacaoEl.textContent.trim();
+            if (horaEl) hora = horaEl.textContent.trim();
+        }
+
+        const actionData = {
+            id: 'id_' + Date.now() + Math.random().toString(36).substr(2, 5),
+            timestamp: Date.now(),
+            nome: nome,
+            local: local,
+            acao: acao,
+            subacao: subacao,
+            hora: hora,
+            cmd: onclickStr
+        };
+
+        addActionToUI(actionData, true);
+        saveActionToStore(actionData);
+        hasAdded = true;
+    });
+
+    if (hasAdded) {
+        const empty = document.getElementById('ext-acesso-empty');
+        if (empty) empty.remove();
+    }
+}
+
+function addActionToUI(data, prepend = false) {
+    const list = document.getElementById('ext-acesso-list');
+    if (!list) return;
+
+    const item = document.createElement('div');
+    item.className = 'ext-action-item';
+    item.dataset.id = data.id;
+    item.style.cssText = `
+        background: white;
+        border: 1px solid #e2e8f0;
+        border-radius: 10px;
+        padding: 10px;
+        display: flex;
+        flex-direction: column;
+        gap: 4px;
+        position: relative;
+        box-shadow: 0 2px 4px rgba(0,0,0,0.02);
+        transition: transform 0.2s;
+    `;
+
+    item.innerHTML = `
+        <div style="display: flex; justify-content: space-between; align-items: flex-start;">
+            <div style="font-weight: 600; color: #1e293b; font-size: 13px; max-width: 80%;">${data.nome}</div>
+            <div style="font-size: 10px; color: #64748b; background: #f1f5f9; padding: 2px 5px; border-radius: 4px;">${data.hora}</div>
+        </div>
+        <div style="font-size: 11px; color: #475569;">${data.local}</div>
+        <div style="display: flex; align-items: center; gap: 5px; margin-top: 2px;">
+            <span style="font-size: 11px; font-weight: 600; color: #4f46e5;">${data.acao}</span>
+            <span style="font-size: 10px; color: #94a3b8;">•</span>
+            <span style="font-size: 11px; color: #64748b;">${data.subacao}</span>
+        </div>
+        <div style="margin-top: 8px; border-top: 1px dashed #e2e8f0; padding-top: 8px; display: flex; justify-content: flex-end; gap: 8px;">
+             <button class="ext-btn-execute" style="background: #4f46e5; color: white; border: none; border-radius: 6px; padding: 5px 10px; font-size: 11px; font-weight: 600; cursor: pointer; display: flex; align-items: center; gap: 4px;">
+                <span class="material-icons" style="font-size: 14px;">bolt</span> Executar
+             </button>
+        </div>
+    `;
+
+    item.querySelector('.ext-btn-execute').onclick = () => {
+        const script = document.createElement('script');
+        script.textContent = data.cmd;
+        (document.head || document.documentElement).appendChild(script);
+        script.remove();
+
+        item.style.backgroundColor = '#f0f9ff';
+        item.style.borderColor = '#bae6fd';
+        setTimeout(() => {
+            item.style.backgroundColor = 'white';
+            item.style.borderColor = '#e2e8f0';
+        }, 1000);
+    };
+
+    if (prepend) {
+        list.insertBefore(item, list.firstChild);
+    } else {
+        list.appendChild(item);
+    }
+}
+
+function saveActionToStore(data) {
+    let actions = JSON.parse(localStorage.getItem('ext_captured_actions_v1') || '[]');
+    if (!actions.find(a => a.cmd === data.cmd)) {
+        actions.unshift(data);
+        if (actions.length > 50) actions.pop();
+        localStorage.setItem('ext_captured_actions_v1', JSON.stringify(actions));
+    }
+}
+
+function loadStoredActions() {
+    const actions = JSON.parse(localStorage.getItem('ext_captured_actions_v1') || '[]');
+    const list = document.getElementById('ext-acesso-list');
+    if (actions.length > 0) {
+        const empty = document.getElementById('ext-acesso-empty');
+        if (empty) empty.remove();
+        
+        actions.reverse().forEach(a => {
+            capturedActionsSet.add(a.cmd);
+            addActionToUI(a, true);
+        });
+    }
+}
+
+
+// --- FIM MONITORAMENTO ACESSO ---
+
+
 // Função para aplicar correções de estilo e altura na página de detalhes
 function applyDetailPageStyles() {
     const elementsToFix = ['.content_iframe', '.lv_detalhe', '#ctl00_conteudo_uppEdit'];
@@ -597,5 +841,8 @@ window.addEventListener('load', () => {
         } else {
             console.log('[DEBUG GLOBAL] Iframe NÃO encontrado na página de listagem.');
         }
+    } else if (pathname.includes('cond.aspx')) {
+        console.log('[DEBUG GLOBAL] Página de controle de acesso (cond.aspx) detectada.');
+        initControleAcessoMonitoring();
     }
 });
