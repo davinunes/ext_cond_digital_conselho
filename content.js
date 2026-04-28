@@ -394,6 +394,9 @@ function processControleAcesso(container, playSoundOnNew = false) {
         if (playSoundOnNew && acaoNormalizada.includes('veiculo')) {
             playVehicleSound();
         }
+
+        // Se for um item NI (Não Identificado), tenta extrair a verdadeira placa no background!
+        fetchPlateDataInBackground(actionData);
         
         hasAdded = true;
     });
@@ -426,7 +429,7 @@ function addActionToUI(data, prepend = false) {
 
     item.innerHTML = `
         <div style="display: flex; justify-content: space-between; align-items: flex-start;">
-            <div style="font-weight: 600; color: #1e293b; font-size: 13px; max-width: 80%;">${data.nome}</div>
+            <div class="ext-item-title" style="font-weight: 600; color: #1e293b; font-size: 13px; max-width: 80%;">${data.nome}</div>
             <div style="font-size: 10px; color: #64748b; background: #f1f5f9; padding: 2px 5px; border-radius: 4px;">${data.hora}</div>
         </div>
         <div style="font-size: 11px; color: #475569;">${data.local}</div>
@@ -443,36 +446,33 @@ function addActionToUI(data, prepend = false) {
     `;
 
     item.querySelector('.ext-btn-execute').onclick = () => {
-        let targetEl = document.getElementById(data.cmd);
+        let hiddenInput = document.querySelector('.txtAssociarDispositivo');
+        let hiddenBtn = document.querySelector('.btnAssociarDispositivo');
         
-        if (targetEl) {
-             targetEl.click();
+        // Em WebForms, definir os inputs invisíveis garante o 100% de preenchimento dos dados do modal!
+        if (hiddenInput && hiddenBtn) {
+            hiddenInput.value = data.cmd; // ID do dispositivo
+            hiddenBtn.click(); // forçar o postback do panel 
         } else {
-             // Caso o evento original tenha sumido (o motor atualizou a lista),
-             // recriamos a peça toda porque o script original provavelmente navega pelos vizinhos
-             // Ex: $(this).closest('.linha').find('.s12.bold').text()
-             
-             let rootContainer = document.querySelector('.alert_ca_conteudo') || document.body;
-             
-             let mockLinha = document.createElement('div');
-             mockLinha.className = 'linha ghost-action-linha';
-             mockLinha.style.display = 'none'; // mantemos invisível para não piscar na tela
-             
-             mockLinha.innerHTML = `
-                <div class="esq s12 bold cor t85 ex">${data.nome}</div>
-                <div class="esq t15">
-                    <span id="${data.cmd}" class="material-icons eventoClick s16 pointer">edit</span>
-                </div>
-                <div class="s10 t100">${data.local}</div>
-             `;
-             
-             rootContainer.appendChild(mockLinha);
-             
-             let mockBtn = mockLinha.querySelector('.eventoClick');
-             if (mockBtn) mockBtn.click();
-             
-             // Limpa o lixo após pouco tempo
-             setTimeout(() => mockLinha.remove(), 100);
+            // Fallbacks caso a arquitetura da página mude
+            let targetEl = document.getElementById(data.cmd);
+            if (targetEl) {
+                 targetEl.click();
+            } else {
+                 let rootContainer = document.querySelector('.alert_ca_conteudo') || document.body;
+                 let mockLinha = document.createElement('div');
+                 mockLinha.className = 'linha ghost-action-linha';
+                 mockLinha.style.display = 'none'; // invisível
+                 mockLinha.innerHTML = `
+                    <div class="esq s12 bold cor t85 ex">${data.nome}</div>
+                    <div class="esq t15"><span id="${data.cmd}" class="material-icons eventoClick s16 pointer">edit</span></div>
+                    <div class="s10 t100">${data.local}</div>
+                 `;
+                 rootContainer.appendChild(mockLinha);
+                 let mockBtn = mockLinha.querySelector('.eventoClick');
+                 if (mockBtn) mockBtn.click();
+                 setTimeout(() => mockLinha.remove(), 100);
+            }
         }
 
         item.style.backgroundColor = '#f0f9ff';
@@ -921,3 +921,53 @@ window.addEventListener('load', () => {
         initControleAcessoMonitoring();
     }
 });
+
+// Extrai silenciosamente a placa/nome do veículo quando o registro aponta para NI
+async function fetchPlateDataInBackground(actionData) {
+    if (!actionData || !actionData.cmd) return;
+    if (!actionData.nome || !actionData.nome.toLowerCase().includes('não identificado')) return;
+
+    try {
+        const form = document.forms[0];
+        if (!form) return;
+
+        const formData = new FormData(form);
+        formData.append('ctl00$phDialog$AssociarDispositivo1$txtAssociarDispositivo', actionData.cmd);
+        formData.append('ctl00$phDialog$AssociarDispositivo1$btnAssociarDispositivo', ' ');
+
+        const res = await fetch(form.action || location.href, {
+            method: 'POST',
+            body: formData,
+            // Header X-MicrosoftAjax omitido intencionalmente para gerar o documento completo do postback
+        });
+
+        const text = await res.text();
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(text, 'text/html');
+
+        const span = doc.querySelector('#ctl00_phDialog_AssociarDispositivo1_lblIdentificador');
+        if (span && span.textContent.trim()) {
+            let placaDesc = span.textContent.trim();
+            
+            // Corrige o nome na memória e storage
+            actionData.nome = placaDesc;
+            let actions = JSON.parse(localStorage.getItem('ext_captured_actions_v1') || '[]');
+            let idx = actions.findIndex(a => a.id === actionData.id);
+            if (idx > -1) {
+                actions[idx].nome = placaDesc;
+                localStorage.setItem('ext_captured_actions_v1', JSON.stringify(actions));
+            }
+
+            // Atualiza a UI se já estiver gerada
+            const itemUI = document.querySelector(`.ext-action-item[data-id="${actionData.id}"]`);
+            if (itemUI) {
+                const titleEl = itemUI.querySelector('.ext-item-title');
+                if (titleEl) titleEl.textContent = placaDesc;
+            }
+            
+            console.log("[ACESSO] Extraída Placa Oculta com Sucesso para:", placaDesc);
+        }
+    } catch(e) {
+        console.warn("[ACESSO] Falha ao tentar varrer metadados de placa online:", e);
+    }
+}
