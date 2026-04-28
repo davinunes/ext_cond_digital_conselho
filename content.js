@@ -445,34 +445,29 @@ function addActionToUI(data, prepend = false) {
         </div>
     `;
 
-    item.querySelector('.ext-btn-execute').onclick = () => {
-        let hiddenInput = document.querySelector('.txtAssociarDispositivo');
-        let hiddenBtn = document.querySelector('.btnAssociarDispositivo');
+    item.querySelector('.ext-btn-execute').onclick = async () => {
+        // Tenta garantir a extração dos dados (Placa e Modelo) se for item Não Identificado
+        if (data.nome && data.nome.toLowerCase().includes('não identificado')) {
+            await fetchPlateDataInBackground(data); 
+        }
+
+        let nativePencil = document.getElementById(data.cmd);
+        if (nativePencil) {
+            nativePencil.click(); // Funciona garantido se o lápis já existe no DOM visível
+            return;
+        }
+
+        // Se o lápis rolou pra fora da tela ou é um registro antes da inicialização do UpdatePanel:
+        // Procuramos o form oculto injetado pelo primeiro lápis
+        let hiddenInput = document.querySelector('input[name*="txtAssociarDispositivo"]');
+        let hiddenBtn = document.querySelector('input[name*="btnAssociarDispositivo"]');
         
-        // Em WebForms, definir os inputs invisíveis garante o 100% de preenchimento dos dados do modal!
         if (hiddenInput && hiddenBtn) {
             hiddenInput.value = data.cmd; // ID do dispositivo
-            hiddenBtn.click(); // forçar o postback do panel 
+            hiddenBtn.click(); // força o postback do panel
         } else {
-            // Fallbacks caso a arquitetura da página mude
-            let targetEl = document.getElementById(data.cmd);
-            if (targetEl) {
-                 targetEl.click();
-            } else {
-                 let rootContainer = document.querySelector('.alert_ca_conteudo') || document.body;
-                 let mockLinha = document.createElement('div');
-                 mockLinha.className = 'linha ghost-action-linha';
-                 mockLinha.style.display = 'none'; // invisível
-                 mockLinha.innerHTML = `
-                    <div class="esq s12 bold cor t85 ex">${data.nome}</div>
-                    <div class="esq t15"><span id="${data.cmd}" class="material-icons eventoClick s16 pointer">edit</span></div>
-                    <div class="s10 t100">${data.local}</div>
-                 `;
-                 rootContainer.appendChild(mockLinha);
-                 let mockBtn = mockLinha.querySelector('.eventoClick');
-                 if (mockBtn) mockBtn.click();
-                 setTimeout(() => mockLinha.remove(), 100);
-            }
+            // O sistema ainda não carregou o HTML do modal para a página (ocorre ao carregar limpo)
+            alert('DOM Incompleto: O sistema precisa registrar ao menos um veículo/morador ativo ou você precisa aguardar aparecer um lápis de edição nativo na tela para liberar esta função.\n\nContudo, se você clicou no botão para tentar descobrir a Placa, verifique se ela não foi atualizada agora no próprio botão através de nossa busca em background!');
         }
 
         item.style.backgroundColor = '#f0f9ff';
@@ -480,7 +475,7 @@ function addActionToUI(data, prepend = false) {
         setTimeout(() => {
             item.style.backgroundColor = 'white';
             item.style.borderColor = '#e2e8f0';
-        }, 1000);
+        }, 300);
     };
 
     if (prepend) {
