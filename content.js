@@ -307,39 +307,24 @@ function processControleAcesso(container) {
     let hasAdded = false;
 
     rows.forEach(linha => {
-        const anchor = linha.querySelector('a[onclick]');
         const spanClick = linha.querySelector('.eventoClick[id]');
         
-        if (!anchor && !spanClick) return;
+        // Agora ignoramos os correspondências (que usam 'a[onclick]') e focamos só nos spans
+        if (!spanClick) return;
 
-        let cmd = "";
-        let isEdit = false;
-
-        if (anchor) {
-            cmd = anchor.getAttribute('onclick');
-        } else if (spanClick) {
-            const clickId = spanClick.getAttribute('id');
-            // Gera um script que simula o clique no contexto da página para aquele ID específico
-            cmd = `(function(){ 
-                let d = document.getElementById('${clickId}'); 
-                if (d) { d.dispatchEvent(new MouseEvent('click', {bubbles:true})); }
-                else { 
-                    // Fallback se o elemento original sumiu: cria um temporário para disparar o evento que o motor espera
-                    let t = document.createElement('span'); t.id='${clickId}'; t.className='eventoClick'; t.style.display='none';
-                    document.body.appendChild(t); t.dispatchEvent(new MouseEvent('click', {bubbles:true})); t.remove();
-                }
-            })()`;
-            isEdit = true;
-        }
+        const clickId = spanClick.getAttribute('id');
         
-        // Evita duplicados baseados no comando exato
+        // Passamos apenas o ID como "comando" para que possamos despachar o evento de outra forma
+        let cmd = clickId;
+        
+        // Evita duplicados baseados no ID do clique
         if (capturedActionsSet.has(cmd)) return;
         capturedActionsSet.add(cmd);
 
         const nome = (linha.querySelector('.esq.s12.bold.cor') || {textContent: 'Identificação NI'}).textContent.trim();
         const local = (linha.querySelector('.s10.t100') || {textContent: ''}).textContent.trim();
         
-        let acao = isEdit ? "Vincular/Editar" : "Acesso";
+        let acao = "Vincular/Editar";
         let subacao = "";
         let hora = new Date().toLocaleTimeString();
 
@@ -363,8 +348,8 @@ function processControleAcesso(container) {
             acao: acao,
             subacao: subacao,
             hora: hora,
-            cmd: cmd,
-            isEdit: isEdit
+            cmd: cmd, // Agora guardamos apenas o ID
+            isEdit: true
         };
 
         addActionToUI(actionData, true);
@@ -417,10 +402,29 @@ function addActionToUI(data, prepend = false) {
     `;
 
     item.querySelector('.ext-btn-execute').onclick = () => {
-        const script = document.createElement('script');
-        script.textContent = data.cmd;
-        (document.head || document.documentElement).appendChild(script);
-        script.remove();
+        // Encontra o elemento original ou um similar na página e despacha o clique diretamente
+        // Isso evita o erro de Content Security Policy (script inline)
+        let targetEl = document.getElementById(data.cmd);
+        
+        if (targetEl) {
+             targetEl.click();
+        } else {
+             // Se o elemento não existir mais no DOM, criamos um fantasma temporário
+             // Muitos desses frameworks legados associam o listener pelo ID (usando jQuery delegação, por exemplo)
+             let ghost = document.createElement('span');
+             ghost.id = data.cmd;
+             ghost.className = 'eventoClick';
+             ghost.style.display = 'none';
+             document.body.appendChild(ghost);
+             // Tenta disparar usando o click() nativo ou dispatchEvent dependendo de como a página lê
+             ghost.click(); 
+             
+             // Se necessário, uma segunda tentativa com dispatchEvent clássico:
+             // ghost.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+             
+             // Remove após tentar
+             setTimeout(() => ghost.remove(), 100);
+        }
 
         item.style.backgroundColor = '#f0f9ff';
         item.style.borderColor = '#bae6fd';
