@@ -210,10 +210,10 @@ function initControleAcessoMonitoring() {
 
     const setupObserver = () => {
         const targetContainer = document.querySelector('.alert_ca_conteudo');
-        
+
         if (targetContainer) {
             console.log('[ACESSO] ✅ Container de alertas encontrado.');
-            
+
             // Processa o que já existe (sem tocar som)
             processControleAcesso(targetContainer, false);
 
@@ -319,8 +319,8 @@ function playVehicleSound() {
         // Som de notificação curto e não invasivo ("pop-ding")
         oscillator.type = 'sine';
         oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime); // Mi
-        oscillator.frequency.setValueAtTime(800.25, audioCtx.currentTime + 0.1); 
-        
+        oscillator.frequency.setValueAtTime(800.25, audioCtx.currentTime + 0.1);
+
         gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
         gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.05); // Volume mais baixo (10%)
         gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime + 0.1);
@@ -331,7 +331,7 @@ function playVehicleSound() {
 
         oscillator.start(audioCtx.currentTime);
         oscillator.stop(audioCtx.currentTime + 0.3);
-    } catch(e) {
+    } catch (e) {
         console.warn("[ACESSO] Não foi possível tocar o som (Bloqueio do navegador):", e);
     }
 }
@@ -342,22 +342,22 @@ function processControleAcesso(container, playSoundOnNew = false) {
 
     rows.forEach(linha => {
         const spanClick = linha.querySelector('.eventoClick[id]');
-        
+
         // Agora ignoramos os correspondências (que usam 'a[onclick]') e focamos só nos spans
         if (!spanClick) return;
 
         const clickId = spanClick.getAttribute('id');
-        
+
         // Passamos apenas o ID como "comando" para que possamos despachar o evento de outra forma
         let cmd = clickId;
-        
+
         // Evita duplicados baseados no ID do clique
         if (capturedActionsSet.has(cmd)) return;
         capturedActionsSet.add(cmd);
 
-        const nome = (linha.querySelector('.esq.s12.bold.cor') || {textContent: 'Identificação NI'}).textContent.trim();
-        const local = (linha.querySelector('.s10.t100') || {textContent: ''}).textContent.trim();
-        
+        const nome = (linha.querySelector('.esq.s12.bold.cor') || { textContent: 'Identificação NI' }).textContent.trim();
+        const local = (linha.querySelector('.s10.t100') || { textContent: '' }).textContent.trim();
+
         let acao = "Vincular/Editar";
         let subacao = "";
         let hora = new Date().toLocaleTimeString();
@@ -388,7 +388,7 @@ function processControleAcesso(container, playSoundOnNew = false) {
 
         addActionToUI(actionData, true);
         saveActionToStore(actionData);
-        
+
         // Verifica se é um veículo (A palavra normalmente aparece na variável 'acao' como "Veiculos P1" ou no 'nome' ex: "FIAT - ")
         const acaoNormalizada = acao.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
         if (playSoundOnNew && acaoNormalizada.includes('veiculo')) {
@@ -397,7 +397,7 @@ function processControleAcesso(container, playSoundOnNew = false) {
 
         // Se for um item NI (Não Identificado), tenta extrair a verdadeira placa no background!
         fetchPlateDataInBackground(actionData);
-        
+
         hasAdded = true;
     });
 
@@ -446,9 +446,10 @@ function addActionToUI(data, prepend = false) {
     `;
 
     item.querySelector('.ext-btn-execute').onclick = async () => {
+        playVehicleSound();
         // Tenta garantir a extração dos dados (Placa e Modelo) se for item Não Identificado
         if (data.nome && data.nome.toLowerCase().includes('não identificado')) {
-            await fetchPlateDataInBackground(data); 
+            await fetchPlateDataInBackground(data);
         }
 
         let nativePencil = document.getElementById(data.cmd);
@@ -461,7 +462,7 @@ function addActionToUI(data, prepend = false) {
         // Procuramos o form oculto injetado pelo primeiro lápis
         let hiddenInput = document.querySelector('input[name*="txtAssociarDispositivo"]');
         let hiddenBtn = document.querySelector('input[name*="btnAssociarDispositivo"]');
-        
+
         if (hiddenInput && hiddenBtn) {
             hiddenInput.value = data.cmd; // ID do dispositivo
             hiddenBtn.click(); // força o postback do panel
@@ -500,7 +501,7 @@ function loadStoredActions() {
     if (actions.length > 0) {
         const empty = document.getElementById('ext-acesso-empty');
         if (empty) empty.remove();
-        
+
         actions.reverse().forEach(a => {
             capturedActionsSet.add(a.cmd);
             addActionToUI(a, true);
@@ -943,7 +944,7 @@ async function fetchPlateDataInBackground(actionData) {
         const span = doc.querySelector('#ctl00_phDialog_AssociarDispositivo1_lblIdentificador');
         if (span && span.textContent.trim()) {
             let placaDesc = span.textContent.trim();
-            
+
             // Corrige o nome na memória e storage
             actionData.nome = placaDesc;
             let actions = JSON.parse(localStorage.getItem('ext_captured_actions_v1') || '[]');
@@ -959,10 +960,10 @@ async function fetchPlateDataInBackground(actionData) {
                 const titleEl = itemUI.querySelector('.ext-item-title');
                 if (titleEl) titleEl.textContent = placaDesc;
             }
-            
+
             console.log("[ACESSO] Extraída Placa Oculta com Sucesso para:", placaDesc);
         }
-    } catch(e) {
+    } catch (e) {
         console.warn("[ACESSO] Falha ao tentar varrer metadados de placa online:", e);
     }
 }
