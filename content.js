@@ -214,8 +214,8 @@ function initControleAcessoMonitoring() {
         if (targetContainer) {
             console.log('[ACESSO] ✅ Container de alertas encontrado.');
             
-            // Processa o que já existe
-            processControleAcesso(targetContainer);
+            // Processa o que já existe (sem tocar som)
+            processControleAcesso(targetContainer, false);
 
             // Observer para mudanças (novos alertas)
             const observer = new MutationObserver((mutations) => {
@@ -224,7 +224,7 @@ function initControleAcessoMonitoring() {
                     if (m.addedNodes.length > 0) hasNewEntries = true;
                 });
                 if (hasNewEntries) {
-                    processControleAcesso(targetContainer);
+                    processControleAcesso(targetContainer, true);
                 }
             });
 
@@ -302,7 +302,41 @@ function ensureAcessoUI() {
     loadStoredActions();
 }
 
-function processControleAcesso(container) {
+let audioCtx = null;
+
+function playVehicleSound() {
+    try {
+        if (!audioCtx) {
+            audioCtx = new (window.AudioContext || window.webkitAudioContext)();
+        }
+        if (audioCtx.state === 'suspended') {
+            audioCtx.resume();
+        }
+
+        const oscillator = audioCtx.createOscillator();
+        const gainNode = audioCtx.createGain();
+
+        // Som de notificação curto e não invasivo ("pop-ding")
+        oscillator.type = 'sine';
+        oscillator.frequency.setValueAtTime(659.25, audioCtx.currentTime); // Mi
+        oscillator.frequency.setValueAtTime(800.25, audioCtx.currentTime + 0.1); 
+        
+        gainNode.gain.setValueAtTime(0, audioCtx.currentTime);
+        gainNode.gain.linearRampToValueAtTime(0.1, audioCtx.currentTime + 0.05); // Volume mais baixo (10%)
+        gainNode.gain.setValueAtTime(0.1, audioCtx.currentTime + 0.1);
+        gainNode.gain.exponentialRampToValueAtTime(0.001, audioCtx.currentTime + 0.3);
+
+        oscillator.connect(gainNode);
+        gainNode.connect(audioCtx.destination);
+
+        oscillator.start(audioCtx.currentTime);
+        oscillator.stop(audioCtx.currentTime + 0.3);
+    } catch(e) {
+        console.warn("[ACESSO] Não foi possível tocar o som (Bloqueio do navegador):", e);
+    }
+}
+
+function processControleAcesso(container, playSoundOnNew = false) {
     const rows = container.querySelectorAll('.linha');
     let hasAdded = false;
 
@@ -354,6 +388,13 @@ function processControleAcesso(container) {
 
         addActionToUI(actionData, true);
         saveActionToStore(actionData);
+        
+        // Verifica se é um veículo (A palavra normalmente aparece na variável 'acao' como "Veiculos P1" ou no 'nome' ex: "FIAT - ")
+        const acaoNormalizada = acao.toLowerCase().normalize("NFD").replace(/[\u0300-\u036f]/g, "");
+        if (playSoundOnNew && acaoNormalizada.includes('veiculo')) {
+            playVehicleSound();
+        }
+        
         hasAdded = true;
     });
 
@@ -402,28 +443,36 @@ function addActionToUI(data, prepend = false) {
     `;
 
     item.querySelector('.ext-btn-execute').onclick = () => {
-        // Encontra o elemento original ou um similar na página e despacha o clique diretamente
-        // Isso evita o erro de Content Security Policy (script inline)
         let targetEl = document.getElementById(data.cmd);
         
         if (targetEl) {
              targetEl.click();
         } else {
-             // Se o elemento não existir mais no DOM, criamos um fantasma temporário
-             // Muitos desses frameworks legados associam o listener pelo ID (usando jQuery delegação, por exemplo)
-             let ghost = document.createElement('span');
-             ghost.id = data.cmd;
-             ghost.className = 'eventoClick';
-             ghost.style.display = 'none';
-             document.body.appendChild(ghost);
-             // Tenta disparar usando o click() nativo ou dispatchEvent dependendo de como a página lê
-             ghost.click(); 
+             // Caso o evento original tenha sumido (o motor atualizou a lista),
+             // recriamos a peça toda porque o script original provavelmente navega pelos vizinhos
+             // Ex: $(this).closest('.linha').find('.s12.bold').text()
              
-             // Se necessário, uma segunda tentativa com dispatchEvent clássico:
-             // ghost.dispatchEvent(new MouseEvent('click', { bubbles: true, cancelable: true, view: window }));
+             let rootContainer = document.querySelector('.alert_ca_conteudo') || document.body;
              
-             // Remove após tentar
-             setTimeout(() => ghost.remove(), 100);
+             let mockLinha = document.createElement('div');
+             mockLinha.className = 'linha ghost-action-linha';
+             mockLinha.style.display = 'none'; // mantemos invisível para não piscar na tela
+             
+             mockLinha.innerHTML = `
+                <div class="esq s12 bold cor t85 ex">${data.nome}</div>
+                <div class="esq t15">
+                    <span id="${data.cmd}" class="material-icons eventoClick s16 pointer">edit</span>
+                </div>
+                <div class="s10 t100">${data.local}</div>
+             `;
+             
+             rootContainer.appendChild(mockLinha);
+             
+             let mockBtn = mockLinha.querySelector('.eventoClick');
+             if (mockBtn) mockBtn.click();
+             
+             // Limpa o lixo após pouco tempo
+             setTimeout(() => mockLinha.remove(), 100);
         }
 
         item.style.backgroundColor = '#f0f9ff';
