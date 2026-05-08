@@ -15,10 +15,17 @@
   "content_scripts": [
     {
       "matches": [
-        "https://app.condominiodigital.com.br/*",
-        "https://mobile.vidadesindico.com.br/*"
+        "https://app.condominiodigital.com.br/*"
       ],
       "js": ["content.js"]
+    },
+    {
+      "matches": [
+        "https://mobile.vidadesindico.com.br/*"
+      ],
+      "js": ["inject.js"],
+      "world": "MAIN",
+      "run_at": "document_start"
     }
   ]
 }
