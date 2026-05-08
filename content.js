@@ -915,6 +915,73 @@ window.addEventListener('load', () => {
     } else if (pathname.includes('cond.aspx')) {
         console.log('[DEBUG GLOBAL] Página de controle de acesso (cond.aspx) detectada.');
         initControleAcessoMonitoring();
+    } else if (pathname.includes('SegundaViaSL.aspx')) {
+        console.log('[DEBUG GLOBAL] Página de boleto webview detectada.');
+        
+        // Injeta script para mockar o ambiente webview nativo e interceptar chamadas
+        const script = document.createElement('script');
+        script.textContent = `
+            console.log('[BOLETO] Injetando script de interceptação de PDF...');
+            
+            // 1. Mock do webkit para evitar erros de ReferenceError
+            if (typeof window.webkit === 'undefined') {
+                window.webkit = {
+                    messageHandlers: new Proxy({}, {
+                        get: function(target, prop) {
+                            return {
+                                postMessage: function(msg) {
+                                    console.log('[BOLETO] Mock webkit acionado:', prop, msg);
+                                    let targetUrl = null;
+                                    if (typeof msg === 'string' && msg.startsWith('http')) {
+                                        targetUrl = msg;
+                                    } else if (typeof msg === 'object' && msg !== null) {
+                                        if (msg.url) targetUrl = msg.url;
+                                        else if (msg.link) targetUrl = msg.link;
+                                    }
+                                    if (targetUrl) {
+                                        window.open(targetUrl, '_blank');
+                                    }
+                                }
+                            };
+                        }
+                    })
+                };
+            }
+            
+            // 2. Interceptação direta da função abrirArquivo()
+            const interceptorTimer = setInterval(() => {
+                if (typeof window.abrirArquivo === 'function' && !window.abrirArquivo.isIntercepted) {
+                    const originalAbrirArquivo = window.abrirArquivo;
+                    window.abrirArquivo = function(url) {
+                        console.log('[BOLETO] Interceptado abrirArquivo com URL:', url);
+                        if (url && typeof url === 'string') {
+                            window.open(url, '_blank');
+                        } else {
+                            try { originalAbrirArquivo(url); } catch(e) { console.error(e); }
+                        }
+                    };
+                    window.abrirArquivo.isIntercepted = true;
+                    console.log('[BOLETO] Função abrirArquivo sobrescrita com sucesso!');
+                }
+                
+                // Também tenta interceptar o AbreSV por segurança
+                if (typeof window.AbreSV === 'function' && !window.AbreSV.isIntercepted) {
+                    const originalAbreSV = window.AbreSV;
+                    window.AbreSV = function(url) {
+                        console.log('[BOLETO] Interceptado AbreSV com URL:', url);
+                        if (url && typeof url === 'string') {
+                            window.open(url, '_blank');
+                        } else {
+                            try { originalAbreSV(url); } catch(e) { console.error(e); }
+                        }
+                    };
+                    window.AbreSV.isIntercepted = true;
+                    console.log('[BOLETO] Função AbreSV sobrescrita com sucesso!');
+                }
+            }, 500);
+        `;
+        (document.head || document.documentElement).appendChild(script);
+        script.remove();
     }
 });
 

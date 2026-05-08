@@ -9,11 +9,15 @@
   ],
   "host_permissions": [
     "https://mini.davinunes.eti.br/*",
-    "https://app.condominiodigital.com.br/*"
+    "https://app.condominiodigital.com.br/*",
+    "https://mobile.vidadesindico.com.br/*"
   ],
   "content_scripts": [
     {
-      "matches": ["https://app.condominiodigital.com.br/*"],
+      "matches": [
+        "https://app.condominiodigital.com.br/*",
+        "https://mobile.vidadesindico.com.br/*"
+      ],
       "js": ["content.js"]
     }
   ]
