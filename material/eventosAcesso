@@ -1,0 +1,589 @@
+curl ^"https://apiv8.vds.app.br/evento_acesso?page=1^&limit=21^&sortBy=dthora^&order=desc^&dtInicio=2026-07-29T00:00^&dtFim=2026-07-29T23:59^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/evento_acesso?page=1^&limit=21^&sortBy=dthora^&order=desc^&dtInicio=2026-07-29T00:00^&dtFim=2026-07-29T23:59^" ^
+  -X ^"OPTIONS^" ^
+  -H ^"accept: */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"access-control-request-headers: authorization^" ^
+  -H ^"access-control-request-method: GET^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/visitante/2026/7/f-6808932.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/visitante/2026/7/f-8517470.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1139953.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1139503.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/images/icone/153/cinza/AUTOMOVEL.png^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"Referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1142336.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1143216.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1495300.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1141126.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/visitante/2026/7/f-9912164.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/images/icone/153/cinza/MORADOR.png^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/evento_acesso?page=2^&limit=21^&sortBy=dthora^&order=desc^&dtInicio=2026-07-29T00:00^&dtFim=2026-07-29T23:59^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/evento_acesso?page=2^&limit=21^&sortBy=dthora^&order=desc^&dtInicio=2026-07-29T00:00^&dtFim=2026-07-29T23:59^" ^
+  -X ^"OPTIONS^" ^
+  -H ^"accept: */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"access-control-request-headers: authorization^" ^
+  -H ^"access-control-request-method: GET^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1143198.jpg^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"Referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1142146.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/images/icone/153/cinza/PESSOA.png^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1143222.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/SINDICO/g-1183567.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1141822.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/visitante/2026/5/f-8872206.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1143011.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1140977.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1139841.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/bloco?Combo=True^&IsAdmin=false^&Tipo=^" ^
+  -X ^"OPTIONS^" ^
+  -H ^"accept: */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"access-control-request-headers: authorization^" ^
+  -H ^"access-control-request-method: GET^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/evento_tipo^" ^
+  -X ^"OPTIONS^" ^
+  -H ^"accept: */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"access-control-request-headers: authorization^" ^
+  -H ^"access-control-request-method: GET^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/bloco?Combo=True^&IsAdmin=false^&Tipo=^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/evento_tipo^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/unidade?Combo=True^&bloco.uuid=d7835e76-18c9-4834-964f-d2463b2e03c4^" ^
+  -X ^"OPTIONS^" ^
+  -H ^"accept: */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"access-control-request-headers: authorization^" ^
+  -H ^"access-control-request-method: GET^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/unidade?Combo=True^&bloco.uuid=d7835e76-18c9-4834-964f-d2463b2e03c4^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/bloco?Combo=True^&IsAdmin=false^&Tipo=^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/unidade?Combo=True^&bloco.uuid=d7835e76-18c9-4834-964f-d2463b2e03c4^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/evento_acesso?page=1^&limit=21^&sortBy=dthora^&order=desc^&dtInicio=2026-07-29T00:00^&dtFim=2026-07-29T23:59^&unidade.bloco.uuid=d7835e76-18c9-4834-964f-d2463b2e03c4^&unidade.uuid=ec283937-fb6b-4df0-b049-92918396f657^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/bloco?Combo=True^&IsAdmin=false^&Tipo=^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/unidade?Combo=True^&bloco.uuid=d7835e76-18c9-4834-964f-d2463b2e03c4^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/bloco?Combo=True^&IsAdmin=false^&Tipo=^" ^
+  -X ^"OPTIONS^" ^
+  -H ^"accept: */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"access-control-request-headers: authorization^" ^
+  -H ^"access-control-request-method: GET^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/unidade?Combo=True^&bloco.uuid=d7835e76-18c9-4834-964f-d2463b2e03c4^" ^
+  -X ^"OPTIONS^" ^
+  -H ^"accept: */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"access-control-request-headers: authorization^" ^
+  -H ^"access-control-request-method: GET^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/evento_acesso?page=1^&limit=21^&sortBy=dthora^&order=desc^&dtInicio=2026-07-29T00:00^&dtFim=2026-07-29T23:59^&unidade.bloco.uuid=d7835e76-18c9-4834-964f-d2463b2e03c4^&unidade.uuid=ec283937-fb6b-4df0-b049-92918396f657^" ^
+  -X ^"OPTIONS^" ^
+  -H ^"accept: */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"access-control-request-headers: authorization^" ^
+  -H ^"access-control-request-method: GET^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/bloco?Combo=True^&IsAdmin=false^&Tipo=^" ^
+  -X ^"OPTIONS^" ^
+  -H ^"accept: */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"access-control-request-headers: authorization^" ^
+  -H ^"access-control-request-method: GET^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/unidade?Combo=True^&bloco.uuid=d7835e76-18c9-4834-964f-d2463b2e03c4^" ^
+  -X ^"OPTIONS^" ^
+  -H ^"accept: */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"access-control-request-headers: authorization^" ^
+  -H ^"access-control-request-method: GET^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/bloco?Combo=True^&IsAdmin=false^&Tipo=^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://apiv8.vds.app.br/unidade?Combo=True^&bloco.uuid=d7835e76-18c9-4834-964f-d2463b2e03c4^" ^
+  -H ^"accept: application/json, text/plain, */*^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -H ^"authorization: Bearer eyJhbGciOiJSU0EtT0FFUCIsImVuYyI6IkEyNTZDQkMtSFM1MTIiLCJraWQiOiIyOTQxMTZjMC1lNWVjLTRiMzEtYjFjMy05MTRiZTRiYjIxNzEiLCJ0eXAiOiJKV1QiLCJjdHkiOiJKV1QifQ.xa-cv1iAJhsMkhv-4sRAjg0Htp3wbT7mvGI80RiEwzReVXStZb9mI5s1h-mgrVxsnBOmfeHG5x2fnrlhwfY6drNyqZ-9GPXWBzRarHd_6-0fP6EYZUWBIRJBjKavOfEh0z_yXj0PxljaGEyNarUlmSBs4f-IlkdQhW6cBy2CoA4fPY48wVvulm7NZqVKWj3XDJYu6V6k-gGvoU2TmJItl-Byl50CX3cwSdy_PPwoOMqR78zCxcsbM_kn09Kh_g4FRVk-yhkYKFuq-sUcNiwc_SoZJNFs1QCnoBGdxhnqfQvGvwXOTviPebyOxfiRt9TNTycOeoeMX7C4IC3F8ZA0QQ.IemR21mOUoNYygp8W39rgg.LefR8xuBJFCcIvwpeFJh3DlPNifyytvscy9TOc8ATMjYrBLooFxm6bHtzDHg73sdnnddC9gBTRfxNtAzeszgPeEfIgP0Yr0RPI__aUKkHJK_YW-9reOy08bATKG43_0tKUIWWcsEEmFPIESEVzPDFWbCLIaKA_WvSg0YtWqO06W8PEESiDHKh0hGXFrEHzaxt0d9HnF-XsU0oR55_bsID_A5aTFAVZhsV-1bOGtpW_axmdVxu_AqTWtvyvkQIC-HYtMrMmZaqgmAO6PJbuNAfX4eJXmIuuGjIJgLhPVkiF_gnmmumS9bmNM5AVJnnsWITlnD-yryaRyp-EQ1xrwwQdW9KqLecX-v6S4HqEibNkASpEZwzt8txXh_8ASSfKEnQmZezalNkx-N4pHQoIcJU_abWu22stycWkvbXEtnDsyzlFCedO_ptlzsJ3g5aEEsYhmtn_iUcS4IfhJWwazX37V2MV_jY2y5Mdh6oj7QiyhkFsvTezMxxIvXbou7kL_bLPRJ611TcRyaFpKnj0F0KQ.1GKUoEHfV_m-f64Oo5yLA5tdp63sGMM5Lh3iMq0X3NY^" ^
+  -H ^"origin: https://app1.vidadesindico.com.br^" ^
+  -H ^"priority: u=1, i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: empty^" ^
+  -H ^"sec-fetch-mode: cors^" ^
+  -H ^"sec-fetch-site: cross-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1139400.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" &
+curl ^"https://app.vidadesindico.com.br/app/images/icone/153/cinza/AUTOMOVEL.png^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"Referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" &
+curl ^"https://app.vidadesindico.com.br/app/dados/cond/1441/foto/PESSOA/f-1139399.jpg^" ^
+  -H ^"accept: image/avif,image/webp,image/apng,image/svg+xml,image/*,*/*;q=0.8^" ^
+  -H ^"accept-language: pt-BR,pt;q=0.9,en-US;q=0.8,en;q=0.7^" ^
+  -b ^"_fbp=fb.2.1780496412066.73388583152668442; _gcl_au=1.1.366148292.1780496412; _ga_XBN5QHTEYC=GS2.1.s1782826171^$o7^$g0^$t1782826171^$j60^$l0^$h0; _ga=GA1.1.1616300112.1779969539; __trf.src=encoded_eyJmaXJzdF9zZXNzaW9uIjp7InZhbHVlIjoiKG5vbmUpIiwiZXh0cmFfcGFyYW1zIjp7fX0sImN1cnJlbnRfc2Vzc2lvbiI6eyJ2YWx1ZSI6Iihub25lKSIsImV4dHJhX3BhcmFtcyI6e319LCJjcmVhdGVkX2F0IjoxNzgyOTkzNzcxOTY2fQ==^" ^
+  -H ^"priority: i^" ^
+  -H ^"referer: https://app1.vidadesindico.com.br/^" ^
+  -H ^"sec-ch-ua: ^\^"Not;A=Brand^\^";v=^\^"8^\^", ^\^"Chromium^\^";v=^\^"150^\^", ^\^"Google Chrome^\^";v=^\^"150^\^"^" ^
+  -H ^"sec-ch-ua-mobile: ?0^" ^
+  -H ^"sec-ch-ua-platform: ^\^"Windows^\^"^" ^
+  -H ^"sec-fetch-dest: image^" ^
+  -H ^"sec-fetch-mode: no-cors^" ^
+  -H ^"sec-fetch-site: same-site^" ^
+  -H ^"user-agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/150.0.0.0 Safari/537.36^"

@@ -915,8 +915,252 @@ window.addEventListener('load', () => {
     } else if (pathname.includes('cond.aspx')) {
         console.log('[DEBUG GLOBAL] Página de controle de acesso (cond.aspx) detectada.');
         initControleAcessoMonitoring();
+        initCorrespondenciaFilter();
     }
 });
+
+// --- MÓDULO FILTRO DE CORRESPONDÊNCIAS (cond.aspx / box-conteudo) ---
+let isCorrFilterActive = localStorage.getItem('ext_modo_somente_correspondencias') === 'true';
+let totalCorrespondenciasDetectadas = 0;
+
+function injectCorrFilterStyles() {
+    if (document.getElementById('ext-correspondencias-styles')) return;
+
+    const style = document.createElement('style');
+    style.id = 'ext-correspondencias-styles';
+    style.textContent = `
+        @import url('https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap');
+        @import url('https://fonts.googleapis.com/icon?family=Material+Icons');
+
+        #ext-corr-floating-container {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            z-index: 999999;
+            font-family: 'Inter', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: flex-end;
+            gap: 8px;
+            user-select: none;
+        }
+
+        .ext-corr-toggle-pill {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            background: #1e293b;
+            color: #ffffff;
+            padding: 8px 16px;
+            border-radius: 9999px;
+            box-shadow: 0 10px 25px -5px rgba(0, 0, 0, 0.3), 0 8px 10px -6px rgba(0, 0, 0, 0.2);
+            border: 1px solid rgba(255, 255, 255, 0.15);
+            cursor: pointer;
+            transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+            backdrop-filter: blur(8px);
+        }
+
+        .ext-corr-toggle-pill:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 14px 28px -5px rgba(0, 0, 0, 0.4);
+        }
+
+        .ext-corr-toggle-pill.active {
+            background: linear-gradient(135deg, #059669 0%, #10b981 100%);
+            border-color: rgba(255, 255, 255, 0.3);
+        }
+
+        .ext-corr-pill-icon {
+            font-size: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .ext-corr-pill-title {
+            font-size: 12px;
+            font-weight: 600;
+            letter-spacing: 0.3px;
+            text-transform: uppercase;
+        }
+
+        .ext-corr-badge {
+            background: rgba(255, 255, 255, 0.2);
+            padding: 2px 7px;
+            border-radius: 12px;
+            font-size: 11px;
+            font-weight: 700;
+        }
+
+        .ext-corr-switch {
+            position: relative;
+            width: 34px;
+            height: 18px;
+            background-color: #475569;
+            border-radius: 20px;
+            transition: background-color 0.2s;
+        }
+
+        .ext-corr-toggle-pill.active .ext-corr-switch {
+            background-color: #ffffff;
+        }
+
+        .ext-corr-switch-knob {
+            position: absolute;
+            top: 2px;
+            left: 2px;
+            width: 14px;
+            height: 14px;
+            background-color: #ffffff;
+            border-radius: 50%;
+            transition: transform 0.2s;
+        }
+
+        .ext-corr-toggle-pill.active .ext-corr-switch-knob {
+            transform: translateX(16px);
+            background-color: #059669;
+        }
+
+        body.ext-somente-correspondencias-on .alert_ca_conteudo .linha[data-is-correspondencia="false"],
+        body.ext-somente-correspondencias-on .box-conteudo .linha[data-is-correspondencia="false"],
+        body.ext-somente-correspondencias-on #box-conteudo .linha[data-is-correspondencia="false"],
+        body.ext-somente-correspondencias-on .alert_ca_conteudo > div[data-is-correspondencia="false"],
+        body.ext-somente-correspondencias-on .box-conteudo > div[data-is-correspondencia="false"] {
+            display: none !important;
+        }
+
+        .linha[data-is-correspondencia="true"],
+        div[data-is-correspondencia="true"] {
+            border-left: 4px solid #10b981 !important;
+            background-color: rgba(240, 253, 244, 0.8) !important;
+            transition: background-color 0.3s ease;
+        }
+    `;
+    document.head.appendChild(style);
+}
+
+function isElementCorrespondencia(element) {
+    if (!element || element.nodeType !== Node.ELEMENT_NODE) return false;
+
+    if (element.dataset.isCorrespondencia !== undefined) {
+        return element.dataset.isCorrespondencia === 'true';
+    }
+
+    const textContent = (element.textContent || "").toLowerCase();
+    const hasCorrespondenciaLink = element.querySelector('a[onclick*="correspondencia" i], a[onclick*="encomenda" i], a[onclick*="entrega" i]');
+    if (hasCorrespondenciaLink) return true;
+
+    const linkTag = element.querySelector('a[onclick]');
+    const spanClick = element.querySelector('.eventoClick[id]');
+    if (linkTag && !spanClick && (textContent.includes('encomenda') || textContent.includes('correspond') || textContent.includes('pacote') || textContent.includes('carta') || textContent.includes('sedex') || textContent.includes('recebido'))) {
+        return true;
+    }
+
+    const keywords = ['correspondência', 'correspondencia', 'encomenda', 'pacote', 'carta simples', 'carta registrada', 'sedex', 'entrega recebida'];
+    for (const kw of keywords) {
+        if (textContent.includes(kw)) return true;
+    }
+
+    const img = element.querySelector('img[src*="correspondencia" i], img[src*="carta" i], img[src*="encomenda" i], img[src*="envelope" i]');
+    if (img) return true;
+
+    return false;
+}
+
+function processCorrContainerElements(container) {
+    if (!container) return;
+    const items = container.querySelectorAll('.linha, > div');
+    let currentCount = 0;
+
+    items.forEach(item => {
+        const isCorr = isElementCorrespondencia(item);
+        item.dataset.isCorrespondencia = isCorr ? 'true' : 'false';
+        if (isCorr) currentCount++;
+    });
+
+    totalCorrespondenciasDetectadas = currentCount;
+    const badge = document.getElementById('ext-corr-count-badge');
+    if (badge) badge.textContent = totalCorrespondenciasDetectadas;
+}
+
+function ensureCorrFloatingToggle() {
+    if (document.getElementById('ext-corr-floating-container')) return;
+
+    const container = document.createElement('div');
+    container.id = 'ext-corr-floating-container';
+
+    const pill = document.createElement('div');
+    pill.id = 'ext-corr-pill';
+    pill.className = `ext-corr-toggle-pill ${isCorrFilterActive ? 'active' : ''}`;
+    pill.title = 'Clique para alternar a exibição apenas de correspondências na esteira';
+
+    pill.innerHTML = `
+        <span class="material-icons ext-corr-pill-icon">mark_email_unread</span>
+        <span class="ext-corr-pill-title">Só Correspondências</span>
+        <span id="ext-corr-count-badge" class="ext-corr-badge">${totalCorrespondenciasDetectadas}</span>
+        <div class="ext-corr-switch">
+            <div class="ext-corr-switch-knob"></div>
+        </div>
+    `;
+
+    pill.addEventListener('click', () => {
+        isCorrFilterActive = !isCorrFilterActive;
+        localStorage.setItem('ext_modo_somente_correspondencias', isCorrFilterActive);
+        applyCorrFilterState();
+    });
+
+    container.appendChild(pill);
+    document.body.appendChild(container);
+
+    applyCorrFilterState();
+}
+
+function applyCorrFilterState() {
+    const pill = document.getElementById('ext-corr-pill');
+    if (isCorrFilterActive) {
+        document.body.classList.add('ext-somente-correspondencias-on');
+        if (pill) pill.classList.add('active');
+    } else {
+        document.body.classList.remove('ext-somente-correspondencias-on');
+        if (pill) pill.classList.remove('active');
+    }
+}
+
+function initCorrespondenciaFilter() {
+    injectCorrFilterStyles();
+    ensureCorrFloatingToggle();
+
+    const findContainersAndObserve = () => {
+        const targets = [
+            document.querySelector('.alert_ca_conteudo'),
+            document.querySelector('.box-conteudo'),
+            document.querySelector('#box-conteudo')
+        ].filter(Boolean);
+
+        if (targets.length > 0) {
+            targets.forEach(target => {
+                processCorrContainerElements(target);
+
+                const observer = new MutationObserver((mutations) => {
+                    let hasAdded = false;
+                    mutations.forEach(m => {
+                        if (m.addedNodes.length > 0) hasAdded = true;
+                    });
+                    if (hasAdded) {
+                        processCorrContainerElements(target);
+                    }
+                });
+
+                observer.observe(target, { childList: true, subtree: true });
+            });
+        } else {
+            setTimeout(findContainersAndObserve, 1000);
+        }
+    };
+
+    findContainersAndObserve();
+}
+// --- FIM MÓDULO FILTRO DE CORRESPONDÊNCIAS ---
 
 // Extrai silenciosamente a placa/nome do veículo quando o registro aponta para NI
 async function fetchPlateDataInBackground(actionData) {

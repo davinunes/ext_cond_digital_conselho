@@ -1,0 +1,22 @@
+{
+  "manifest_version": 3,
+  "name": "Condomínio Digital - Isolador de Correspondências",
+  "version": "1.0",
+  "description": "Filtra e isola exclusivamente as correspondências na esteira do sistema em tempo real.",
+  "permissions": [
+    "activeTab",
+    "storage"
+  ],
+  "host_permissions": [
+    "https://app.condominiodigital.com.br/*"
+  ],
+  "content_scripts": [
+    {
+      "matches": [
+        "https://app.condominiodigital.com.br/*"
+      ],
+      "js": ["content.js"],
+      "run_at": "document_end"
+    }
+  ]
+}
