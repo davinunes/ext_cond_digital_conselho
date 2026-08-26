@@ -182,7 +182,7 @@
         if (!container) return;
 
         // Linhas ou divs diretas
-        const items = container.querySelectorAll('.linha, > div');
+        const items = container.querySelectorAll('.linha, :scope > div');
         let currentCount = 0;
 
         items.forEach(item => {
