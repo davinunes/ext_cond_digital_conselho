@@ -1096,18 +1096,22 @@ function processCorrContainerElements(container) {
         }
     });
 
-    // 2ª Passada: Contabilizar correspondências visíveis
-    let currentCount = 0;
+    // 2ª Passada: Contabilizar correspondências visíveis considerando a dupla (cada par = 1 correspondência)
+    let totalLinhasCorrespondencia = 0;
     items.forEach(item => {
         if (item.dataset.isCorrespondencia === 'true') {
-            // Contamos apenas itens com conteúdo principal ou link para não duplicar o contador
-            if (item.querySelector('a[onclick]') || (item.textContent && item.textContent.trim().length > 15)) {
-                currentCount++;
-            }
+            totalLinhasCorrespondencia++;
         }
     });
 
-    totalCorrespondenciasDetectadas = currentCount;
+    // Tenta contar pelos botões/ícones de ação diretos ou divide as linhas pareadas por 2
+    const envelopeButtons = container.querySelectorAll('[data-is-correspondencia="true"] img[src*="envelope" i], [data-is-correspondencia="true"] [class*="envelope" i], [data-is-correspondencia="true"] a[onclick*="correspondencia" i]');
+    if (envelopeButtons.length > 0) {
+        totalCorrespondenciasDetectadas = envelopeButtons.length;
+    } else {
+        totalCorrespondenciasDetectadas = Math.ceil(totalLinhasCorrespondencia / 2);
+    }
+
     const badge = document.getElementById('ext-corr-count-badge');
     if (badge) badge.textContent = totalCorrespondenciasDetectadas;
 }

@@ -214,17 +214,21 @@
             }
         });
 
-        // 2ª Passada: Contabilizar correspondências visíveis
-        let currentCount = 0;
+        // 2ª Passada: Contabilizar correspondências visíveis considerando a dupla (cada par = 1 correspondência)
+        let totalLinhasCorrespondencia = 0;
         items.forEach(item => {
             if (item.dataset.isCorrespondencia === 'true') {
-                if (item.querySelector('a[onclick]') || (item.textContent && item.textContent.trim().length > 15)) {
-                    currentCount++;
-                }
+                totalLinhasCorrespondencia++;
             }
         });
 
-        correspondenciasCount = currentCount;
+        const envelopeButtons = container.querySelectorAll('[data-is-correspondencia="true"] img[src*="envelope" i], [data-is-correspondencia="true"] [class*="envelope" i], [data-is-correspondencia="true"] a[onclick*="correspondencia" i]');
+        if (envelopeButtons.length > 0) {
+            correspondenciasCount = envelopeButtons.length;
+        } else {
+            correspondenciasCount = Math.ceil(totalLinhasCorrespondencia / 2);
+        }
+
         updateBadgeCounter();
     }
 
