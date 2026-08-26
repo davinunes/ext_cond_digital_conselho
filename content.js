@@ -1047,8 +1047,14 @@ function isElementCorrespondencia(element) {
     }
 
     const textContent = (element.textContent || "").toLowerCase();
+    
+    // Checagem de links ou botões de ação de correspondência/encomenda/entrega
     const hasCorrespondenciaLink = element.querySelector('a[onclick*="correspondencia" i], a[onclick*="encomenda" i], a[onclick*="entrega" i]');
     if (hasCorrespondenciaLink) return true;
+
+    // Checagem por imagens ou ícones de envelope/carta/entrega
+    const hasEnvelopeIcon = element.querySelector('img[src*="envelope" i], img[src*="carta" i], img[src*="correspondencia" i], img[src*="mail" i], img[src*="caixa" i], img[src*="pacote" i], [class*="envelope" i], [id*="envelope" i], [title*="correspondência" i], [title*="correspondencia" i], [title*="encomenda" i]');
+    if (hasEnvelopeIcon) return true;
 
     const linkTag = element.querySelector('a[onclick]');
     const spanClick = element.querySelector('.eventoClick[id]');
@@ -1061,21 +1067,44 @@ function isElementCorrespondencia(element) {
         if (textContent.includes(kw)) return true;
     }
 
-    const img = element.querySelector('img[src*="correspondencia" i], img[src*="carta" i], img[src*="encomenda" i], img[src*="envelope" i]');
-    if (img) return true;
-
     return false;
 }
 
 function processCorrContainerElements(container) {
     if (!container) return;
-    const items = container.querySelectorAll('.linha, :scope > div');
-    let currentCount = 0;
-
-    items.forEach(item => {
+    const items = Array.from(container.querySelectorAll('.linha, :scope > div'));
+    
+    // 1ª Passada: Classificar e associar a div do botão de envelope/ação à linha de detalhes
+    items.forEach((item) => {
         const isCorr = isElementCorrespondencia(item);
-        item.dataset.isCorrespondencia = isCorr ? 'true' : 'false';
-        if (isCorr) currentCount++;
+        if (isCorr) {
+            item.dataset.isCorrespondencia = 'true';
+
+            // Garante que a div acima (botão de ação/envelope) seja mantida visível
+            const prev = item.previousElementSibling;
+            if (prev && (prev.classList.contains('linha') || prev.tagName === 'DIV')) {
+                prev.dataset.isCorrespondencia = 'true';
+            }
+
+            // Garante que a div abaixo (detalhes da correspondência) seja mantida visível
+            const next = item.nextElementSibling;
+            if (next && (next.classList.contains('linha') || next.tagName === 'DIV')) {
+                next.dataset.isCorrespondencia = 'true';
+            }
+        } else if (item.dataset.isCorrespondencia !== 'true') {
+            item.dataset.isCorrespondencia = 'false';
+        }
+    });
+
+    // 2ª Passada: Contabilizar correspondências visíveis
+    let currentCount = 0;
+    items.forEach(item => {
+        if (item.dataset.isCorrespondencia === 'true') {
+            // Contamos apenas itens com conteúdo principal ou link para não duplicar o contador
+            if (item.querySelector('a[onclick]') || (item.textContent && item.textContent.trim().length > 15)) {
+                currentCount++;
+            }
+        }
     });
 
     totalCorrespondenciasDetectadas = currentCount;
