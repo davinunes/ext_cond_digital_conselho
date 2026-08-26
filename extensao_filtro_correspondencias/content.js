@@ -128,53 +128,21 @@
     }
 
     // 2. Classificador Inteligente de Itens da Esteira
-    function isElementCorrespondencia(element) {
-        if (!element || element.nodeType !== Node.ELEMENT_NODE) return false;
+    function detectCorrespondenciaType(element) {
+        if (!element || element.nodeType !== Node.ELEMENT_NODE) return null;
 
-        // Se já foi classificado, retorna o cache do dataset
-        if (element.dataset.isCorrespondencia !== undefined) {
-            return element.dataset.isCorrespondencia === 'true';
-        }
+        // 1. É botão/cabeçalho de ação com envelope ou link direto de correspondência?
+        const hasEnvelope = element.querySelector('img[src*="envelope" i], img[src*="carta" i], img[src*="correspondencia" i], img[src*="mail" i], [class*="envelope" i], [id*="envelope" i], a[onclick*="correspondencia" i], a[onclick*="encomenda" i], a[onclick*="entrega" i]');
+        if (hasEnvelope) return 'header';
 
+        // 2. É linha de texto/dados de correspondência?
         const textContent = (element.textContent || "").toLowerCase();
-
-        // Checagem de links característicos de correspondência (geralmente tags <a> com onclick de correspondência/encomenda)
-        const hasCorrespondenciaLink = element.querySelector('a[onclick*="correspondencia" i], a[onclick*="encomenda" i], a[onclick*="entrega" i]');
-        if (hasCorrespondenciaLink) return true;
-
-        // Na tela do Condomínio Digital, ações de veículos/portão costumam usar span.eventoClick,
-        // enquanto correspondências e encomendas usam links 'a' para abrir o modal de entrega
-        const linkTag = element.querySelector('a[onclick]');
-        const spanClick = element.querySelector('.eventoClick[id]');
-        if (linkTag && !spanClick && (textContent.includes('encomenda') || textContent.includes('correspond') || textContent.includes('pacote') || textContent.includes('carta') || textContent.includes('sedex') || textContent.includes('recebido'))) {
-            return true;
-        }
-
-        // Checagem por imagens ou ícones de envelope/carta/entrega
-        const hasEnvelopeIcon = element.querySelector('img[src*="envelope" i], img[src*="carta" i], img[src*="correspondencia" i], img[src*="mail" i], img[src*="caixa" i], img[src*="pacote" i], [class*="envelope" i], [id*="envelope" i], [title*="correspondência" i], [title*="correspondencia" i], [title*="encomenda" i]');
-        if (hasEnvelopeIcon) return true;
-
-        // Checagem textual abrangente
-        const keywords = [
-            'correspondência',
-            'correspondencia',
-            'encomenda',
-            'pacote',
-            'carta simples',
-            'carta registrada',
-            'sedex',
-            'entrega recebida',
-            'aviso de correspondência',
-            'chegada de encomenda'
-        ];
-
+        const keywords = ['correspondência', 'correspondencia', 'encomenda', 'pacote', 'carta simples', 'carta registrada', 'sedex', 'entrega recebida'];
         for (const kw of keywords) {
-            if (textContent.includes(kw)) {
-                return true;
-            }
+            if (textContent.includes(kw)) return 'body';
         }
 
-        return false;
+        return null;
     }
 
     // 3. Processar e classificar elementos dentro do container
@@ -183,52 +151,50 @@
 
         // Linhas ou divs diretas
         const items = Array.from(container.querySelectorAll('.linha, :scope > div'));
+        const corrElementsSet = new Set();
 
-        // 1ª Passada: Classificar e associar a div do botão de envelope/ação à linha de detalhes
+        // 1ª Passada: Identificação estrita e pareamento da dupla sem efeito cascata
         items.forEach((item) => {
-            const isCorr = isElementCorrespondencia(item);
-            if (isCorr) {
-                item.dataset.isCorrespondencia = 'true';
-
-                // Garante que a div acima (botão de ação/envelope) seja mantida visível
-                const prev = item.previousElementSibling;
-                if (prev && (prev.classList.contains('linha') || prev.tagName === 'DIV')) {
-                    prev.dataset.isCorrespondencia = 'true';
+            const type = detectCorrespondenciaType(item);
+            if (type === 'header') {
+                corrElementsSet.add(item);
+                if (item.nextElementSibling && (item.nextElementSibling.classList.contains('linha') || item.nextElementSibling.tagName === 'DIV')) {
+                    corrElementsSet.add(item.nextElementSibling);
                 }
-
-                // Garante que a div abaixo (detalhes da correspondência) seja mantida visível
-                const next = item.nextElementSibling;
-                if (next && (next.classList.contains('linha') || next.tagName === 'DIV')) {
-                    next.dataset.isCorrespondencia = 'true';
+            } else if (type === 'body') {
+                corrElementsSet.add(item);
+                if (item.previousElementSibling && (item.previousElementSibling.classList.contains('linha') || item.previousElementSibling.tagName === 'DIV')) {
+                    corrElementsSet.add(item.previousElementSibling);
                 }
-
-                const itemText = item.textContent.trim();
-                if (!capturedCorrespondenciasMap.has(itemText)) {
-                    capturedCorrespondenciasMap.set(itemText, {
-                        html: item.outerHTML,
-                        timestamp: Date.now()
-                    });
-                }
-            } else if (item.dataset.isCorrespondencia !== 'true') {
-                item.dataset.isCorrespondencia = 'false';
             }
         });
 
-        // 2ª Passada: Contabilizar correspondências visíveis considerando a dupla (cada par = 1 correspondência)
-        let totalLinhasCorrespondencia = 0;
+        // 2ª Passada: Aplicar atributos e remover itens não-correspondência do DOM se filtro estiver ativo
         items.forEach(item => {
-            if (item.dataset.isCorrespondencia === 'true') {
-                totalLinhasCorrespondencia++;
+            if (corrElementsSet.has(item)) {
+                item.dataset.isCorrespondencia = 'true';
+            } else {
+                item.dataset.isCorrespondencia = 'false';
+                // Remove do DOM para a esteira não atingir limite e descartar correspondências antigas
+                if (isFilterActive) {
+                    item.remove();
+                }
             }
         });
 
-        const envelopeButtons = container.querySelectorAll('[data-is-correspondencia="true"] img[src*="envelope" i], [data-is-correspondencia="true"] [class*="envelope" i], [data-is-correspondencia="true"] a[onclick*="correspondencia" i]');
-        if (envelopeButtons.length > 0) {
-            correspondenciasCount = envelopeButtons.length;
-        } else {
-            correspondenciasCount = Math.ceil(totalLinhasCorrespondencia / 2);
+        // 3ª Passada: Contabilizar as duplas de correspondência de forma exata
+        let duplasCount = 0;
+        corrElementsSet.forEach(el => {
+            if (detectCorrespondenciaType(el) === 'header') {
+                duplasCount++;
+            }
+        });
+
+        if (duplasCount === 0 && corrElementsSet.size > 0) {
+            duplasCount = Math.ceil(corrElementsSet.size / 2);
         }
 
+        correspondenciasCount = duplasCount;
         updateBadgeCounter();
     }
 
